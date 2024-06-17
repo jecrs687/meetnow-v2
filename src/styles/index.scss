@@ -1,0 +1,8 @@
+@import "@styles/modules/colors.module.scss";
+@import "@styles/modules/fonts.module.scss";
+
+body {
+    overflow: hidden;
+    color: $color-text;
+    background-color: $color-background;
+}
