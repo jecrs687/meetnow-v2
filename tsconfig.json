@@ -26,7 +26,7 @@
       "@utils/*": ["utils/*"],
       "@enums/*": ["domain/enums/*"],
       "@interfaces/*": ["domain/interfaces/*"],
-      "@types/*": ["domain/types/*"],
+      "@types/*": ["domain/types/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
