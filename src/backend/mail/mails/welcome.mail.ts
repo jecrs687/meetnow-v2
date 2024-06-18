@@ -9,8 +9,8 @@ export const WELCOME_MAIL = (user: User, _: any) => {
         subject: `Bem vindo ao meetnow, ${user.name} !!!`,
         from: 'panda@wordpanda.app',
         attachments: [{
-            filename: 'meetnow.gif',
-            path: 'https://media.tenor.com/xaJrTrfiRcEAAAAM/happy-panda-bamboo.gif',
+            filename: 'meetnow.png',
+            path: 'https://meetnow-v2.vercel.app/assets/logo.png',
             cid: 'panda'
         }],
         html: htmlFormatted,
