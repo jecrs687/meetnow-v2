@@ -6,9 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider          = "postgresql"
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
-  url      = env("DATABASE_URL")
+  url               = env("DATABASE_URL")
 }
 
 model User {
@@ -22,7 +22,11 @@ model User {
   birthday           DateTime?
   numberActiveTables Int           @default(0) @map("number_active_tables")
   Participant        Participant[]
-
+  createdAt          DateTime      @default(now()) @map("created_at")
+  updatedAt          DateTime      @updatedAt @map("updated_at")
+  activatedAt        DateTime?     @map("activated_at")
+  role               UserRole      @default(USER)
+  status             Status        @default(ACTIVE)
 }
 
 model Photo {
@@ -33,7 +37,7 @@ model Photo {
 }
 
 model Places {
-  id          String @id @default(cuid())
+  id          String       @id @default(cuid())
   name        String
   address     String
   city        String
@@ -44,13 +48,56 @@ model Places {
   description String
   review      Int
   categories  Category[]
-  photos PlacePhoto[]
-  tables Table[]
+  photos      PlacePhoto[]
+  tables      Table[]
 }
 
-enum Role {
+
+
+model Table {
+  id           String        @id @default(cuid())
+  number       Int
+  places       Places        @relation(fields: [placeId], references: [id])
+  placeId      String
+  status       TableStatus   @default(ACTIVE)
+  date         String
+  time         String
+  duration     String
+  description  String
+  photo        String
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+  participants Participant[]
+}
+
+model Participant {
+  id        String          @id @default(cuid())
+  user      User            @relation(fields: [userId], references: [id])
+  userId    String
+  table     Table           @relation(fields: [tableId], references: [id])
+  tableId   String
+  status    Status
+  role      ParticipantRole @default(GUEST)
+  createdAt DateTime        @default(now()) @map("created_at")
+  updatedAt DateTime        @updatedAt @map("updated_at")
+}
+
+model PlacePhoto {
+  id      String @id @default(cuid())
+  url     String
+  place   Places @relation(fields: [placeId], references: [id])
+  placeId String
+}
+
+
+enum UserRole {
   ADMIN
   USER
+}
+
+enum ParticipantRole {
+  OWNER
+  GUEST
 }
 
 enum Status {
@@ -67,46 +114,11 @@ enum Category {
   CLUB
   LOUNGE
   OTHER
-} 
+}
 
 enum TableStatus {
   ACTIVE
   INACTIVE
   CLOSED
   HIDDEN
-}
-
-model Table {
-  id           String        @id @default(cuid())
-  number       Int
-  places       Places        @relation(fields: [placeId], references: [id])
-  placeId      String
-  status       TableStatus    @default(ACTIVE)
-  date         String
-  time         String
-  duration     String
-  description  String
-  photo        String
-  createdAt    DateTime      @default(now()) @map("created_at")
-  updatedAt    DateTime      @updatedAt      @map("updated_at")
-  participants Participant[]
-}
-
-model Participant {
-  id        String   @id @default(cuid())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  table     Table    @relation(fields: [tableId], references: [id])
-  tableId   String
-  status    Status
-  role      String
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt     @map("updated_at")
-}
-
-model PlacePhoto {
-  id      String @id @default(cuid())
-  url     String
-  place   Places @relation(fields: [placeId], references: [id])
-  placeId String
 }

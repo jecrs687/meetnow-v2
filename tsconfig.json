@@ -1,9 +1,13 @@
 {
   "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "target": "ES2022",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
-    "strict": true,
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
@@ -12,23 +16,61 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "plugins": [
       {
         "name": "next"
       }
     ],
-    "baseUrl": "./src",
+    "baseUrl": "./",
     "paths": {
-      "@core/*": ["container/core/*"],
-      "@components/*": ["container/components/*"],
-      "@pages/*": ["container/pages/*"],
-      "@styles/*": ["styles/*"],
-      "@utils/*": ["utils/*"],
-      "@enums/*": ["domain/enums/*"],
-      "@interfaces/*": ["domain/interfaces/*"],
-      "@types/*": ["domain/types/*"]
-    }
+      "@core/*": [
+        "src/container/core/*"
+      ],
+      "@common/*": [
+        "src/container/common/*"
+      ],
+      "@constants/*": [
+        "src/container/constants/*"
+      ],
+      "@components/*": [
+        "src/container/components/*"
+      ],
+      "@pages/*": [
+        "src/container/pages/*"
+      ],
+      "@styles/*": [
+        "src/styles/*"
+      ],
+      "@utils/*": [
+        "src/utils/*"
+      ],
+      "@enums/*": [
+        "src/domain/enums/*"
+      ],
+      "@interfaces/*": [
+        "src/domain/interfaces/*"
+      ],
+      "@types/*": [
+        "src/domain/types/*"
+      ],
+      "@backend/*": [
+        "src/backend/*"
+      ],
+      "@assets/*": [
+        "public/assets/*"
+      ]
+    },
+    "strict": false
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
