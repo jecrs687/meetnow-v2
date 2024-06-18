@@ -8,14 +8,18 @@ import { useFormState, useFormStatus } from "react-dom";
 import { submit } from './action';
 import styles from './index.module.scss';
 import { TOKEN_KEY } from '@utils/envs';
+import Input from '@core/Input';
+import Button from '@core/Button';
+import LoaderSpinner from '@core/LoaderSpinner';
+import { ROUTES } from '@constants/ROUTES';
 
 function Submit() {
     const status = useFormStatus();
-    return <button disabled={status.pending} type='submit'>
+    return <Button disabled={status.pending} type='submit'>
         {
-            status.pending ? 'loading' : 'Login'
+            status.pending ? <LoaderSpinner /> : 'Login'
         }
-    </button>
+    </Button>
 }
 
 export default function LoginPage() {
@@ -27,6 +31,7 @@ export default function LoginPage() {
 
         if (state.token) {
             localStorage.setItem(TOKEN_KEY, state.token)
+            route.push(ROUTES.HOME())
         }
     }, [state, route])
     return (
@@ -52,17 +57,19 @@ export default function LoginPage() {
 
                 </div>
 
-                <input
+                <Input
                     type='text'
                     placeholder='Email'
                     name="email"
                     title='Email'
+                    error={state.errors?.email}
                 />
-                <input
+                <Input
                     type='password'
                     placeholder='Senha'
                     name="password"
                     title='Senha'
+                    error={state.errors?.password}
                 />
                 <Submit />
 

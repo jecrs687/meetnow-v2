@@ -33,8 +33,7 @@ export default function Register() {
     const [alreadyNavigate, setAlreadyNavigate] = useState(1)
     const stepsErrors = useMemo(() => [
         ['email', 'password', 'passwordConfirmation'],
-        ['firstName', 'lastName'],
-        ['phone', 'username', 'language']
+        ['name', 'bio']
     ], [])
     const errorsByStep = Object
         .entries(stepsErrors)
