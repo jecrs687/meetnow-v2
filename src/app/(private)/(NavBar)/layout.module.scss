@@ -1,0 +1,13 @@
+.layout {
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    width: 100dvw;
+
+    .main {
+        flex: 1;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+
+}

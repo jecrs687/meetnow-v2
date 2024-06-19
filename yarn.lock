@@ -2843,6 +2843,11 @@
     "@types/qs" "*"
     "@types/serve-static" "*"
 
+"@types/google.maps@^3.54.10":
+  version "3.55.10"
+  resolved "https://registry.yarnpkg.com/@types/google.maps/-/google.maps-3.55.10.tgz#ce4a8c375b84990a0e9eec9f151c3494cbe5bf2c"
+  integrity sha512-XbDu2MIvcKgN+MBrufjWcsQRtXTbrBGBKperbhMLnPSq4770+pvlR66Oqq/Ub4AVkmGc9QciCfwPZpVCLaKAOw==
+
 "@types/hast@^3.0.0":
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/@types/hast/-/hast-3.0.4.tgz#1d6b39993b82cea6ad783945b0508c25903e15aa"
@@ -3100,6 +3105,14 @@
   integrity sha512-zdVrhbzZBYo5d1Hfn4bKtqCeKf0FuzW8rSHauzQVMUgv1+1JOwof2mWcBuI+YMJy8s0G0oqAUfQ7HgUDzb8EbA==
   dependencies:
     "@upstash/redis" "^1.31.3"
+
+"@vis.gl/react-google-maps@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@vis.gl/react-google-maps/-/react-google-maps-1.1.0.tgz#1373fd0acf021e4adfa356a79ff624fbc77b18ed"
+  integrity sha512-MxDIhCfPRzTQY1c6sS0GFg8Ukl40o13fkIKEaCN0cR1BIrV4LPo+EuCov9WElbe0bOo8MApx5qAbqBKOmLQyKg==
+  dependencies:
+    "@types/google.maps" "^3.54.10"
+    fast-deep-equal "^3.1.3"
 
 "@vitest/expect@1.3.1":
   version "1.3.1"
@@ -8074,6 +8087,11 @@ react-element-to-jsx-string@^15.0.0:
     "@base2/pretty-print-object" "1.0.1"
     is-plain-object "5.0.0"
     react-is "18.1.0"
+
+react-icons@^5.2.1:
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-5.2.1.tgz#28c2040917b2a2eda639b0f797bff1888e018e4a"
+  integrity sha512-zdbW5GstTzXaVKvGSyTaBalt7HSfuK5ovrzlpyiWHAFXndXTdd/1hdDHI4xBM1Mn7YriT6aqESucFl9kEXzrdw==
 
 react-is@18.1.0:
   version "18.1.0"

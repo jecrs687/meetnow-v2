@@ -27,6 +27,8 @@ model User {
   activatedAt        DateTime?     @map("activated_at")
   role               UserRole      @default(USER)
   status             Status        @default(ACTIVE)
+  address            Address?        @relation(fields: [addressId], references: [id])
+  addressId          String?        @map("address_id")
 }
 
 model Photo {
@@ -36,23 +38,34 @@ model Photo {
   userId String
 }
 
+model Address {
+  id        String   @id @default(cuid())
+  lat       Float?
+  lng       Float?
+  address   String?
+  city      String?
+  state     String?
+  country   String?
+  zip       String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  User      User[]
+  Places    Places[]
+}
+
 model Places {
   id          String       @id @default(cuid())
   name        String
-  address     String
-  city        String
-  state       String
-  country     String
-  zip         String
-  phone       String
+  address     Address       @relation(fields: [addressId], references: [id])
+  addressId   String       @map("address_id")
   description String
   review      Int
   categories  Category[]
   photos      PlacePhoto[]
   tables      Table[]
+  lat         Float
+  lng         Float
 }
-
-
 
 model Table {
   id           String        @id @default(cuid())
@@ -88,7 +101,6 @@ model PlacePhoto {
   place   Places @relation(fields: [placeId], references: [id])
   placeId String
 }
-
 
 enum UserRole {
   ADMIN
