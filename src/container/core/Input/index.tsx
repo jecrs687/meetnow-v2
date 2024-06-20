@@ -2,7 +2,7 @@
 import { zoomOutMobile } from '@utils/zoomOut'
 import clsx from 'clsx'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import styles from './index.module.scss'
 
 function Input({
@@ -20,11 +20,13 @@ function Input({
     onFocus,
     onBlur,
     disabled,
+    field,
+    form,
     ...rest
 }: {
     label?: string,
     placeholder?: string,
-    type?: 'text' | 'password' | 'phone' | 'email',
+    type?: 'text' | 'password' | 'phone' | 'email' | 'number',
     name: string,
     error?: string,
     value?: string,
@@ -36,12 +38,24 @@ function Input({
     onBlur?: (e: any) => void,
     title: string,
     disabled?: boolean,
+    field?: any,
+    form?: any,
     [x: string]: any
 }) {
+    onChange = onChange || field?.onChange
+    name = name || field?.name
+    value = value || field?.value
+    error = error || (form?.touched?.[name] ||
+        form?.submitCount > 0
+        ? form?.errors?.[name] : undefined
+    )
     const [hide, setHide] = useState(true)
     const toggleHide = () => setHide(!hide)
     const typePassword = hide ? 'password' : 'text'
-    const [current, setCurrent] = useState(value);
+    const [current, setCurrent] = useState(value || field?.value);
+    useEffect(() => {
+        setCurrent(value)
+    }, [value])
     const updateValue = (e: any) => {
 
         if (type === 'phone') {
@@ -57,25 +71,25 @@ function Input({
                 e.target.value = e.target.value.replace(/^(\d{1})/, '($1');
             setCurrent(e.target.value);
             e.target.value = e.target.value.replace(/\D/g, '');
-            onChange && onChange(e);
+            onChange?.(e);
 
         } else {
             setCurrent(e.target.value);
-            onChange && onChange(e);
+            onChange?.(e);
         }
     }
     const inputProps = {
         type: type === 'password' ? typePassword : type,
-        name,
+        name: name,
         id: name,
-        value: current,
-        onChange: updateValue,
         placeholder,
-        className: clsx(styles.input, className),
         onFocus,
         disabled,
         onBlur,
-        ...rest?.field,
+        ...field,
+        className: clsx(styles.input, className, field?.className),
+        value: current,
+        onChange: updateValue,
     }
     return (
         <>

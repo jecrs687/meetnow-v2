@@ -6,13 +6,18 @@ import styles from './index.module.scss'
 type CarouselProps = {
     images: string[],
     size?: number,
-    dynamic?: boolean
+    width?: string,
+    height?: string,
+    imageWidth?: number,
+    imageHeight?: number,
 }
 
 export const Carousel = ({
     images,
-    size = 600,
-    dynamic = false
+    width = '400px',
+    height = '400px',
+    imageWidth = 700,
+    imageHeight = 700
 }: CarouselProps) => {
     const [current, setCurrent] = useState(0);
     useEffect(() => {
@@ -24,16 +29,16 @@ export const Carousel = ({
         return () => clearInterval(interval)
     }, [current, images.length])
     return (
-        <div className={styles.container} style={dynamic ? {} : {
-            width: size,
-            height: size,
+        <div className={styles.container} style={{
+            width: width,
+            height: height,
         }}>
             <div className={styles.carousel}>
                 <Image
                     src={images[current]}
                     alt={images[current]}
-                    width={size}
-                    height={size}
+                    width={imageWidth}
+                    height={imageHeight}
                     className={styles.image}
                 />
             </div>

@@ -1,0 +1,31 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border-radius: 5px;
+}
+
+.select {
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    font-size: 16px;
+    color: #333;
+
+    option {
+        font-size: 16px;
+        color: #333;
+
+    }
+}
+
+.timePicker {
+    height: 52px;
+    width: 100%;
+    background-color: #f9f9f9;
+    margin: 20px 0;
+}

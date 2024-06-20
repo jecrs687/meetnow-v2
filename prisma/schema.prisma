@@ -68,14 +68,15 @@ model Place {
 model Group {
   id           String        @id @default(cuid())
   number       Int
+  name         String?
   place        Place         @relation(fields: [placeId], references: [id])
   placeId      String
   status       GroupStatus   @default(ACTIVE)
-  date         String
-  time         String
-  duration     String
+  date         DateTime?
+  time         DateTime?
+  duration     String?
   description  String
-  photo        String
+  photo        String?
   createdAt    DateTime      @default(now()) @map("created_at")
   updatedAt    DateTime      @updatedAt @map("updated_at")
   participants Participant[]
