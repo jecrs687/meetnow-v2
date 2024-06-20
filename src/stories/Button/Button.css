@@ -1,0 +1,23 @@
+/* src/components/GradientButton.css */
+.button {
+    border: none;
+    border-radius: 16px;
+    padding: 15px 30px;
+    font-size: 20px;
+    color: white;
+    cursor: pointer;
+    transition: background 0.5s ease;
+  }
+  
+  .button.primary {
+    background: linear-gradient(90deg, #D12C6B 0%, #B931B3 100%);
+  }
+  
+  .button.secondary {
+    background: linear-gradient(90deg, rgba(0,176,255,1) 0%, rgba(0,87,255,1) 100%);
+  }
+  
+  .button:hover {
+    opacity: 0.9;
+  }
+  
