@@ -1,30 +1,32 @@
 import {
     FaHome, FaUser, FaMapSigns, FaFire, FaPlus
 } from 'react-icons/fa'
+import { ROUTES } from './ROUTES'
 export const NAVBAR = [
     {
         icon: FaHome,
         label: 'Home',
-        url: '/'
-    },
-    {
-        icon: FaUser,
-        label: 'Profile',
-        url: '/profile'
+        url: ROUTES.HOME()
     },
     {
         icon: FaMapSigns,
         label: 'Maps',
-        url: '/maps'
+        url: ROUTES.MAP()
     },
     {
         icon: FaFire,
         label: 'Trending',
-        url: '/trending'
+        url: ROUTES.FIRE()
     },
     {
         icon: FaPlus,
         label: 'Create',
-        url: '/create'
-    }
+        url: ROUTES.PLACE("clxn1y8ft00011392bhy3q6ul")
+    },
+    {
+        icon: FaUser,
+        label: 'Profile',
+        url: ROUTES.PROFILE()
+    },
+
 ]

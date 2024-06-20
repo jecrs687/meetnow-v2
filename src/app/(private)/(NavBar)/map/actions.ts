@@ -1,11 +1,11 @@
 "use server"
 
 import prisma from "@backend/configs/database"
-import { Address, Places } from "@prisma/client"
+import { Address, Place } from "@prisma/client"
 
 export const getPlaces = async (
-): Promise<Array<Places & { address: Address }>> => {
-    return await prisma.places.findMany({
+): Promise<Array<Place & { address: Address }>> => {
+    return await prisma.place.findMany({
         include: {
             address: true
         }

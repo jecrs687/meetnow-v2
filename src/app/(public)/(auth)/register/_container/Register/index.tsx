@@ -18,7 +18,7 @@ function Submit() {
     const status = useFormStatus();
     return <Button disabled={status.pending} type='submit'>
         {
-            status.pending ? <LoaderSpinner /> : 'Cadastrar'
+            status.pending ? <LoaderSpinner size={'25px'} /> : 'Cadastrar'
         }
     </Button>
 }
@@ -53,7 +53,7 @@ export default function Register() {
         if (state.token) {
             localStorage.setItem(TOKEN_KEY, state.token)
             setCookie(TOKEN_KEY, state.token)
-            route.push(ROUTES.DASHBOARD())
+            route.push(ROUTES.HOME())
         }
         if (state.errors) {
             for (const key in stepsErrors) {

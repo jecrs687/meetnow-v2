@@ -40,8 +40,8 @@ model Photo {
 
 model Address {
   id        String   @id @default(cuid())
-  lat       Float?
-  lng       Float?
+  lat       Float
+  lng       Float
   address   String?
   city      String?
   state     String?
@@ -50,10 +50,10 @@ model Address {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
   User      User[]
-  Places    Places[]
+  Places    Place[]
 }
 
-model Places {
+model Place {
   id          String       @id @default(cuid())
   name        String
   address     Address       @relation(fields: [addressId], references: [id])
@@ -63,14 +63,12 @@ model Places {
   categories  Category[]
   photos      PlacePhoto[]
   tables      Table[]
-  lat         Float
-  lng         Float
 }
 
 model Table {
   id           String        @id @default(cuid())
   number       Int
-  places       Places        @relation(fields: [placeId], references: [id])
+  place         Place         @relation(fields: [placeId], references: [id])
   placeId      String
   status       TableStatus   @default(ACTIVE)
   date         String
@@ -98,7 +96,7 @@ model Participant {
 model PlacePhoto {
   id      String @id @default(cuid())
   url     String
-  place   Places @relation(fields: [placeId], references: [id])
+  place   Place @relation(fields: [placeId], references: [id])
   placeId String
 }
 

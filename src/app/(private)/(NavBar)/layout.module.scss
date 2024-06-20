@@ -5,9 +5,13 @@
     width: 100dvw;
 
     .main {
+        display: flex;
+        position: relative;
+        height: 100%;
         flex: 1;
         overflow-y: scroll;
         overflow-x: hidden;
+        background-color: #FFFFFF;
     }
 
 }

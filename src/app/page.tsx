@@ -3,5 +3,5 @@ import styles from "./page.module.scss";
 import { redirect } from "next/navigation";
 
 export default function Home() {
-  redirect("/maps");
+  redirect("/map");
 }

@@ -10,10 +10,8 @@ export default function Layout({
 
     <div className={styles.layout}>
 
-      <main className={styles.main}>
-        {children}
-      </main>
-      <NavBar />
+      {children}
+
     </div>
   );
 }

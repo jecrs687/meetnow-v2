@@ -41,7 +41,7 @@ export default function OtpConfirmation({ id }) {
         if (state.token) {
             localStorage.setItem(TOKEN_KEY, state.token)
             setCookie(TOKEN_KEY, state.token)
-            route.push(ROUTES.DASHBOARD())
+            route.push(ROUTES.HOME())
 
         }
 

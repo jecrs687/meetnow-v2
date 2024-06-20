@@ -19,4 +19,5 @@ export const ROUTES = {
     MAP: () => '/map',
     PLACE: (id) => `/places/${id}`,
     PLACES: () => '/places',
+    FIRE: () => '/fire',
 }
