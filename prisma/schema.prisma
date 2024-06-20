@@ -20,7 +20,7 @@ model User {
   photos             Photo[]
   bio                String?
   birthday           DateTime?
-  numberActiveTables Int           @default(0) @map("number_active_tables")
+  numberActiveGroups Int           @default(0) @map("number_active_groups")
   Participant        Participant[]
   createdAt          DateTime      @default(now()) @map("created_at")
   updatedAt          DateTime      @updatedAt @map("updated_at")
@@ -62,15 +62,15 @@ model Place {
   review      Int
   categories  Category[]
   photos      PlacePhoto[]
-  tables      Table[]
+  groups      Group[]
 }
 
-model Table {
+model Group {
   id           String        @id @default(cuid())
   number       Int
-  place         Place         @relation(fields: [placeId], references: [id])
+  place        Place         @relation(fields: [placeId], references: [id])
   placeId      String
-  status       TableStatus   @default(ACTIVE)
+  status       GroupStatus   @default(ACTIVE)
   date         String
   time         String
   duration     String
@@ -85,8 +85,8 @@ model Participant {
   id        String          @id @default(cuid())
   user      User            @relation(fields: [userId], references: [id])
   userId    String
-  table     Table           @relation(fields: [tableId], references: [id])
-  tableId   String
+  group     Group           @relation(fields: [groupId], references: [id])
+  groupId   String      
   status    Status
   role      ParticipantRole @default(GUEST)
   createdAt DateTime        @default(now()) @map("created_at")
@@ -126,7 +126,7 @@ enum Category {
   OTHER
 }
 
-enum TableStatus {
+enum GroupStatus {
   ACTIVE
   INACTIVE
   CLOSED
