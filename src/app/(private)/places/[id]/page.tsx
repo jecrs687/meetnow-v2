@@ -11,15 +11,11 @@ import Button from "@core/Button"
 import { BackButton } from "@common/BackButton"
 import Link from "next/link"
 import { ROUTES } from "@constants/ROUTES"
+import { getUser } from "@backend/repository/user"
 export default async function Page({
     params: { id }
 }) {
-    const { decoded } = validateToken(cookies().get(TOKEN_KEY).value)
-    const user = await prisma.user.findFirst({
-        where: {
-            id: decoded.id
-        }
-    });
+    const user = await getUser();
     const place = await prisma.place.findFirst({
         where: {
             id

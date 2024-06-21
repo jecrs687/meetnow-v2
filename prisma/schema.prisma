@@ -74,7 +74,7 @@ model Group {
   status       GroupStatus   @default(ACTIVE)
   date         DateTime?
   time         DateTime?
-  duration     String?
+  duration     Int?
   description  String
   photo        String?
   createdAt    DateTime      @default(now()) @map("created_at")

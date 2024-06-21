@@ -6,12 +6,14 @@ import { Carousel } from "@common/Carousel"
 import { validateToken } from "@utils/token"
 import { cookies } from "next/headers"
 import { TOKEN_KEY } from "@utils/envs"
-import { FaGripLines, FaRegUser, FaStar } from "react-icons/fa"
+import { FaGripLines, FaPlus, FaRegUser, FaStar } from "react-icons/fa"
 import Button from "@core/Button"
 import { BackButton } from "@common/BackButton"
 import Link from "next/link"
 import { ROUTES } from "@constants/ROUTES"
 import Input from "@core/Input"
+import { getPlaceWithUsersById } from "@backend/repository/place"
+import { GroupCard } from "./container/GroupCard"
 export default async function Page({
     params: { id }
 }) {
@@ -21,14 +23,7 @@ export default async function Page({
             id: decoded.id
         }
     });
-    const place = await prisma.place.findFirst({
-        where: {
-            id
-        },
-        include: {
-            photos: true
-        }
-    })
+    const place = await getPlaceWithUsersById(id)
 
     if (!place) return <h1>
         Place not found
@@ -42,31 +37,29 @@ export default async function Page({
             </div>
             <div className={styles.header}>
                 <div className={styles.title}>
-                    Mesas
-                </div>
-                <div className={styles.review}>
-
+                    Grupos
                 </div>
             </div>
             <div className={styles.body}>
 
-                <div className={styles.title}>
-                    <h3>
-                        Sobre o {place.name}
-                    </h3>
-                    <h5>
-                        <FaStar /> {place.review}
-                    </h5>
-                </div>
-                <div className={styles.description}>
-                    {place.description}
+
+                <div className={styles.groups}>
+                    {
+                        place.groups.map(
+                            (group) => (
+                                <GroupCard group={group} key={group.id} />
+                            )
+                        )
+                    }
                 </div>
 
 
             </div>
         </div>
         <div className={styles.footer}>
-            <FaGripLines />
+            <Link href={ROUTES.CREATE_GROUP(id)} >
+                <FaPlus />
+            </Link>
             <Link href={ROUTES.GROUPS(id)} className={styles.button}>
                 <Button >
                     Mesa

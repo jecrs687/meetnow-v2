@@ -6,30 +6,33 @@ import { validateToken } from "@utils/token";
 import { TOKEN_KEY } from "@utils/envs";
 import { cookies } from "next/headers";
 import { getUserId } from "@backend/utils/getUserId";
+import { ParticipantRole, Status } from "@prisma/client";
+import { getUser } from "@backend/repository/user";
 
 
 
 export async function onSubmit(values: FormValues & { placeId: string }) {
-    const user = await prisma.user.findFirst({
-        where: {
-            id: await getUserId()
-        }
-    });
-    prisma.group.create({
+    const user = await getUser();
+    const group = await prisma.group.create({
         data: {
             name: values.name,
             description: values.description,
             number: values.quantity,
+            duration: values.duration,
+            date: new Date(values.date),
             place: {
                 connect: {
                     id: values.placeId
                 }
             },
             participants: {
-                connect: {
-                    id: user.id
+                create: {
+                    role: ParticipantRole.OWNER,
+                    userId: user.id,
+                    status: Status.ACTIVE
                 }
             }
         }
     })
+    return group
 }
