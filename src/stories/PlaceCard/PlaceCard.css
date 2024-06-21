@@ -1,0 +1,105 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap");
+
+
+.place-card {
+  font-family: "Montserrat", sans-serif;
+  position: relative;
+  width: 200px;
+  height: 300px;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 10px;
+  transition: opacity 0.3s ease;
+  cursor: pointer;
+}
+
+.place-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(209, 44, 107, 0.5), rgba(185, 49, 179, 0.5));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 15px;
+}
+
+.place-card:hover::before,
+.place-card:active::before {
+    opacity: 0.3;
+}
+
+.place-card-content {
+  padding: 4px;
+  border-radius: 10px;
+  color: white;
+  position: relative;
+  z-index: 1;
+}
+
+.place-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.place-card-title {
+  font-size: 16px;
+  font-weight: 400;
+  background-color: rgba(233, 30, 99, 0.8);
+  padding: 8px 10px;
+  border-radius: 50px;
+  font-style: italic;
+}
+
+.place-card-rating {
+  display: flex;
+  align-items: center;
+  margin-top: 12px;
+  font-size: 14px;
+  padding: 5px 10px;
+  border-radius: 50px;
+  background-color: rgba(233, 30, 99, 0.8);
+  max-width: fit-content;
+}
+
+.rating-text {
+  margin-left: 5px;
+  background-color: transparent;
+  border-radius: 10px;
+  font-style: italic;
+}
+
+.place-card-favorite {
+  display: flex;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 8px;
+  border-radius: 60%;
+  margin-top: 10px;
+  max-width: fit-content;
+}
+
+.place-card-favorite {
+  display: flex;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 5px 8px;
+  border-radius: 50%;
+  margin-top: 10px;
+  max-width: fit-content;
+}
+
+.place-card-footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
