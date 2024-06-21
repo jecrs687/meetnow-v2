@@ -1,0 +1,43 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap");
+
+.tabs {
+  display: flex;
+  flex-direction: column;
+  font-family: "Montserrat", sans-serif;
+}
+
+.tab-labels {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.tab-label {
+  padding: 8px 16px;
+  border: none;
+  background: none;
+  font-size: 16px;
+  color: #B8B8B8;
+  cursor: pointer;
+  border-radius: 20px;
+  margin-right: 5px;
+  transition:
+    background 0.3s,
+    color 0.3s;
+}
+
+.tab-label.active {
+  background: #EDF3FB;
+  color: #e91e63;
+  font-weight: 400;
+}
+
+.tab-label:hover {
+  background: #EDF3FB;
+  
+}
+
+.tab-content {
+  padding: 20px;
+  border-radius: 10px;
+}
