@@ -1,56 +1,101 @@
 .container {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 100%;
-    height: 100%;
-    padding: 10px;
-    border-radius: 10px;
-    background-color: #fff;
-    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s;
-    cursor: pointer;
 
-    &:hover {
-        transform: scale(1.005);
-    }
+    .carousel {}
 
-    .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+    .content {
 
         .title {
-            font-size: 1.2rem;
-            font-weight: 600;
+
+            .name {}
+
+            .description {}
         }
 
-        .duration {
-            font-size: 0.8rem;
-            color: #666;
-        }
+        .participants {}
     }
 
-    .body {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+    .information {
+        .duration {}
 
-        .footer {
-            font-size: 0.8rem;
-            color: #666;
+        .footer {}
+    }
+
+}
+
+// style for a card in a group list
+
+.container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.5s;
+
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.8);
+    }
+
+    .carousel {
+        margin: 0px 10px;
+    }
+
+    .content {
+        margin-right: auto;
+
+        .title {
+
+            .name {
+                font-size: 18px;
+                font-weight: 500;
+            }
+
+            .description {
+                font-size: 14px;
+                font-weight: 500;
+            }
         }
 
         .participants {
             display: flex;
-            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
 
-            .avatar {
-                width: 30px;
-                height: 30px;
-                border-radius: 50%;
-                margin-right: 5px;
+            .participant {
+                h5 {
+                    font-size: 14px;
+                    font-weight: 500;
+                }
             }
+        }
+    }
+
+    .information {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 80px;
+
+        .duration {
+            h5 {
+                font-size: 14px;
+                font-weight: 500;
+            }
+
+            h3 {
+                font-size: 18px;
+                font-weight: 500;
+            }
+        }
+
+        .footer {
+            display: flex;
+            gap: 5px;
+            margin-top: auto;
+            align-items: center;
         }
     }
 }

@@ -58,6 +58,17 @@ export default async function Page({
                 </div>
                 <div className={styles.description}>
                     {place.description}
+                    <pre>
+                        {
+                            JSON.stringify(place, null, 5)
+                        }
+                    </pre>
+                    <pre>
+                        {
+                            JSON.stringify(place, null, 5)
+                        }
+                    </pre>
+
                 </div>
 
 
@@ -67,7 +78,7 @@ export default async function Page({
             <Link href={ROUTES.CREATE_GROUP(id)} >
                 <FaGripLines />
             </Link>
-            <Link href={ROUTES.GROUPS(id)} className={styles.button}>
+            <Link href={ROUTES.PLACE_GROUPS(id)} className={styles.button}>
                 <Button >
                     Mesa
                 </Button>

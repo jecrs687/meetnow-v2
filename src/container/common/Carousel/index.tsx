@@ -2,6 +2,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import styles from './index.module.scss'
+import { ShowIf } from "@common/ShowIf";
 
 type CarouselProps = {
     images: string[],
@@ -10,6 +11,8 @@ type CarouselProps = {
     height?: string,
     imageWidth?: number,
     imageHeight?: number,
+    showDot?: boolean,
+    radius?: number,
 }
 
 export const Carousel = ({
@@ -17,7 +20,9 @@ export const Carousel = ({
     width = '400px',
     height = '400px',
     imageWidth = 700,
-    imageHeight = 700
+    imageHeight = 700,
+    showDot = true,
+    radius = 10,
 }: CarouselProps) => {
     const [current, setCurrent] = useState(0);
     useEffect(() => {
@@ -32,6 +37,7 @@ export const Carousel = ({
         <div className={styles.container} style={{
             width: width,
             height: height,
+            borderRadius: radius,
         }}>
             <div className={styles.carousel}>
                 <Image
@@ -42,18 +48,20 @@ export const Carousel = ({
                     className={styles.image}
                 />
             </div>
-            <div className={styles.buttons}>
-                {
-                    images.map((_, index) => (
-                        <button
-                            className={index === current ? styles.active : styles.inactive}
-                            key={index}
-                            onClick={() => setCurrent(index)}
-                        >
-                        </button>
-                    ))
-                }
-            </div>
-        </div>
+            <ShowIf condition={showDot}>
+                <div className={styles.buttons}>
+                    {
+                        images.map((_, index) => (
+                            <button
+                                className={index === current ? styles.active : styles.inactive}
+                                key={index}
+                                onClick={() => setCurrent(index)}
+                            >
+                            </button>
+                        ))
+                    }
+                </div>
+            </ShowIf >
+        </div >
     );
 }
