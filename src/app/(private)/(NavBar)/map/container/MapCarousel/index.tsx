@@ -28,42 +28,6 @@ export const MapCarousel = ({
                 .map((_, i) => elRefs[i] || createRef()),
         );
     }, [places.length]);
-    useEffect(() => {
-        if (currentActive) {
-            const el = elRefs.find(ref => ref.current.id === currentActive)
-            if (el) {
-                scrollRef.current.scrollTo({
-                    left: el.current.offsetLeft - window.innerWidth / 2 + el.current.offsetWidth / 2,
-                    behavior: 'smooth'
-                })
-            }
-        }
-    }, [currentActive, elRefs])
-
-    useEffect(() => {
-        if (scrollRef.current) {
-            scrollRef.current.scrollTo({
-                left: 0,
-                behavior: 'smooth'
-            })
-            const scrollTo = debounce(
-                (id) => {
-                    const el = elRefs.find(ref => ref.current.id === id)
-                    if (el)
-                        scrollRef.current.scrollTo({
-                            left: el.current.offsetLeft - (window.innerWidth / 2 + el.current.offsetWidth / 2),
-                            behavior: 'smooth'
-                        })
-
-                }, 100
-            )
-            scrollRef.current.addEventListener('scroll', scrollTo)
-            return () => {
-                // eslint-disable-next-line react-hooks/exhaustive-deps
-                scrollRef.current.removeEventListener('scroll', scrollTo)
-            }
-        }
-    }, [scrollRef, elRefs, selectActive])
 
     return (<div className={styles.carousel} ref={scrollRef}>
         {
