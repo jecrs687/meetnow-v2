@@ -75,15 +75,18 @@ export default async function Page({
             </div>
         </div>
         <div className={styles.footer}>
-            <Link href={ROUTES.CREATE_GROUP(id)} >
-                <FaGripLines />
+            <Link href={ROUTES.CREATE_GROUP(id)} className={styles.icon}>
+                <FaGripLines className={styles.icon_button} />
             </Link>
             <Link href={ROUTES.PLACE_GROUPS(id)} className={styles.button}>
                 <Button >
                     Mesa
                 </Button>
             </Link>
-            <FaRegUser />
+            <Link href={ROUTES.CREATE_GROUP(id)} className={styles.icon}>
+
+                <FaRegUser className={styles.icon_button} />
+            </Link>
         </div>
     </div>
 

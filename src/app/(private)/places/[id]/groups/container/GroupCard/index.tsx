@@ -3,6 +3,8 @@ import styles from './index.module.scss'
 import dayjs from "dayjs";
 import { Carousel } from "@common/Carousel";
 import { FaUser } from "react-icons/fa";
+import Link from "next/link";
+import { ROUTES } from "@constants/ROUTES";
 export const GroupCard =
     (
         {
@@ -16,7 +18,7 @@ export const GroupCard =
             const remainingMinutes = minutes % 60;
             return `${hours}h ${remainingMinutes}m`
         }
-        return <div className={styles.container}>
+        return <Link href={ROUTES.GROUP(group.id)} className={styles.container}>
             <div className={styles.carousel}>
                 <Carousel
                     size={100}
@@ -71,5 +73,5 @@ export const GroupCard =
                 </div>
 
             </div>
-        </div>
+        </Link>
     };

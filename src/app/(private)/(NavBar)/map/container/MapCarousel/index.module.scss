@@ -1,0 +1,64 @@
+.carousel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100dvw;
+    height: 100%;
+    padding: 20px;
+    gap: 30px;
+    overflow: hidden;
+    overflow-x: scroll;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    .item {
+        position: relative;
+        width: 300px;
+        height: 200px;
+        background-color: #f5f5f5;
+        border-radius: 10px;
+
+        .image {
+            filter: brightness(0.5);
+        }
+
+        .content {
+            position: absolute;
+            top: 0;
+            left: 0;
+
+            padding: 20px;
+            color: white;
+            height: 100%;
+
+            .name {
+                font-size: 20px;
+                font-weight: 600;
+            }
+
+            .description {
+                font-size: 14px;
+                font-weight: 400;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-line-clamp: 3;
+                -webkit-box-orient: vertical;
+            }
+
+            .link {
+                margin-top: auto;
+            }
+        }
+    }
+
+
+
+    .active {}
+
+
+
+
+}

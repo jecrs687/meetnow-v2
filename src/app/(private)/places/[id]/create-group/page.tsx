@@ -46,15 +46,6 @@ export default async function Page({
                 <GroupCreationForm id={id} />
             </div>
         </div>
-        <div className={styles.footer}>
-            <FaGripLines />
-            <Link href={ROUTES.GROUPS(id)} className={styles.button}>
-                <Button >
-                    Mesa
-                </Button>
-            </Link>
-            <FaRegUser />
-        </div>
     </div>
 
 }

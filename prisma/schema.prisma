@@ -27,15 +27,16 @@ model User {
   activatedAt        DateTime?     @map("activated_at")
   role               UserRole      @default(USER)
   status             Status        @default(ACTIVE)
-  address            Address?        @relation(fields: [addressId], references: [id])
-  addressId          String?        @map("address_id")
+  address            Address?      @relation(fields: [addressId], references: [id])
+  addressId          String?       @map("address_id")
+  Message            Message[]
 }
 
 model Photo {
   id     String @id @default(cuid())
   url    String
   user   User   @relation(fields: [userId], references: [id])
-  userId String
+  userId String @map("user_id")
 }
 
 model Address {
@@ -56,7 +57,7 @@ model Address {
 model Place {
   id          String       @id @default(cuid())
   name        String
-  address     Address       @relation(fields: [addressId], references: [id])
+  address     Address      @relation(fields: [addressId], references: [id])
   addressId   String       @map("address_id")
   description String
   review      Int
@@ -70,13 +71,15 @@ model Group {
   number       Int
   name         String?
   place        Place         @relation(fields: [placeId], references: [id])
-  placeId      String
+  placeId      String         @map("place_id")
   status       GroupStatus   @default(ACTIVE)
   date         DateTime?
   time         DateTime?
   duration     Int?
   description  String
-  photo        String?
+  chat         Chat          @relation(fields: [chatId], references: [id]) 
+  chatId       String        @map("chat_id")
+  photos       GroupPhoto[]
   createdAt    DateTime      @default(now()) @map("created_at")
   updatedAt    DateTime      @updatedAt @map("updated_at")
   participants Participant[]
@@ -85,9 +88,9 @@ model Group {
 model Participant {
   id        String          @id @default(cuid())
   user      User            @relation(fields: [userId], references: [id])
-  userId    String
+  userId    String          @map("user_id")
   group     Group           @relation(fields: [groupId], references: [id])
-  groupId   String      
+  groupId   String          @map("group_id")
   status    Status
   role      ParticipantRole @default(GUEST)
   createdAt DateTime        @default(now()) @map("created_at")
@@ -97,8 +100,61 @@ model Participant {
 model PlacePhoto {
   id      String @id @default(cuid())
   url     String
-  place   Place @relation(fields: [placeId], references: [id])
-  placeId String
+  place   Place  @relation(fields: [placeId], references: [id])
+  placeId String  @map("place_id")
+}
+
+model GroupPhoto {
+  id      String @id @default(cuid())
+  url     String
+  group   Group  @relation(fields: [groupId], references: [id])
+  groupId String @map("group_id")
+}
+
+model Chat {
+  id        String    @id @default(cuid())
+  messages  Message[]
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  Group     Group[]
+}
+
+model Message {
+  id      String    @id @default(cuid())
+  text    String?   @db.VarChar(255)
+  reply   Message?  @relation("ReplyTo", fields: [replyId], references: [id])
+  replyId String?   @map("reply_id")
+  replies Message[] @relation("ReplyTo")
+
+  medias    MessageMedia[]
+  user      User           @relation(fields: [userId], references: [id])
+  userId    String         @map("user_id")
+  chat      Chat           @relation(fields: [chatId], references: [id])
+  chatId    String          @map("chat_id")
+  deletedAt DateTime?      @map("deleted_at")
+  createdAt DateTime       @default(now()) @map("created_at")
+  updatedAt DateTime       @updatedAt @map("updated_at")
+}
+
+model MessageMedia {
+  id        String    @id @default(cuid())
+  url       String
+  type      MediaType
+  message   Message   @relation(fields: [messageId], references: [id])
+  messageId String    @map("message_id")
+}
+
+model ChatHistorical {
+  id           String   @id @default(cuid())
+  snapchot     Json     @map("snapchot")  
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+  AUDIO
 }
 
 enum UserRole {

@@ -3,10 +3,11 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    padding: 10px;
+    position: relative;
 
     .place {
-        flex: 1;
+        padding: 10px 10px 50px;
+        height: 100%;
         overflow: scroll;
 
         .photos {
@@ -21,7 +22,7 @@
             margin: 20px 0px;
 
             .title {
-                transform: translateX(-10px);
+                transform: translateX(-20px);
                 background: linear-gradient(#D1246A, #A738E7);
                 border-radius: 0px 30px 30px 0px;
                 padding: 10px 20px;
@@ -59,6 +60,15 @@
         justify-content: space-around;
         align-items: center;
         margin-top: auto;
+        height: 50px;
+        background: linear-gradient(transparent, 1%, white, white, 98%, white);
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+
+        .icon {
+            transform: translate(0px, 25%);
+        }
 
         .button {
             width: 60%;

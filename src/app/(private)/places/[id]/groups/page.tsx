@@ -14,6 +14,7 @@ import { ROUTES } from "@constants/ROUTES"
 import Input from "@core/Input"
 import { getPlaceWithUsersById } from "@backend/repository/place"
 import { GroupCard } from "./container/GroupCard"
+import { COLORS } from "@styles/modules"
 export default async function Page({
     params: { id }
 }) {
@@ -58,14 +59,8 @@ export default async function Page({
         </div>
         <div className={styles.footer}>
             <Link href={ROUTES.CREATE_GROUP(id)} >
-                <FaPlus />
+                <FaPlus className={styles.icon} color={COLORS.initial} />
             </Link>
-            <Link href={ROUTES.GROUPS(id)} className={styles.button}>
-                <Button >
-                    Mesa
-                </Button>
-            </Link>
-            <FaRegUser />
         </div>
     </div>
 
