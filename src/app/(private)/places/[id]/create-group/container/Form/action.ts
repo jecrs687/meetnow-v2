@@ -20,6 +20,9 @@ export async function onSubmit(values: FormValues & { placeId: string }) {
             number: values.quantity,
             duration: values.duration,
             date: new Date(values.date),
+            chat: {
+                create: {}
+            },
             place: {
                 connect: {
                     id: values.placeId
