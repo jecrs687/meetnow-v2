@@ -39,6 +39,7 @@ export const MapCarousel = ({
             }
         }
     }, [currentActive, elRefs])
+
     useEffect(() => {
         if (scrollRef.current) {
             scrollRef.current.scrollTo({
