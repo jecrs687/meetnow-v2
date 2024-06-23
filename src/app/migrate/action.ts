@@ -12,8 +12,16 @@ const generateAddress = () => ({
     country: faker.location.country(),
     address: faker.location.streetAddress(),
     zip: faker.location.zipCode(),
-    lat: faker.location.latitude(),
-    lng: faker.location.longitude(),
+    lat: faker.location.latitude(
+        {
+            max: 39.50,
+            min: 39.30
+        }
+    ),
+    lng: faker.location.longitude({
+        max: 16.30,
+        min: 16.20
+    }),
 })
 const generateUser = () => ({
     name: faker.person.fullName(),
