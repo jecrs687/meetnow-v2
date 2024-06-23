@@ -37,6 +37,15 @@
       "@components/*": [
         "src/container/components/*"
       ],
+      "@services/*": [
+        "src/container/services/*"
+      ],
+      "@hooks/*": [
+        "src/container/hooks/*"
+      ],
+      "@store/*": [
+        "src/container/store/*"
+      ],
       "@pages/*": [
         "src/container/pages/*"
       ],

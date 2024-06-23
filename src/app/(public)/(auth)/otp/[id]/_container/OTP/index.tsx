@@ -15,10 +15,11 @@ import { TOKEN_KEY } from '@utils/envs';
 import { ShowIf } from '@common/ShowIf';
 import OtpInput from '@common/OTP';
 function Submit({ status }) {
-    return <Button disabled={status.pending} type='submit'>
-        {
-            status.pending ? <LoaderSpinner size='20px' /> : 'Confirmar'
-        }
+    return <Button
+        isLoading={status.pending}
+        disabled={status.pending}
+        type='submit'>
+        Confirmar
     </Button>
 }
 

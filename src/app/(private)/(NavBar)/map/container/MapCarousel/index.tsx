@@ -7,18 +7,26 @@ import { FaArrowRight } from "react-icons/fa";
 import { Carousel } from "@common/Carousel";
 import clsx from "clsx";
 import { debounce } from "@material-ui/core";
+import { Address } from "@prisma/client";
+import { distanceCal } from "@utils/distanceCalc";
+import { useGeoLocation } from "@store/useGeoLocation";
 
 
 export const MapCarousel = ({
     places,
     selectActive,
-    currentActive
+    currentActive,
+    userAddress
 }: {
     places: Awaited<ReturnType<typeof getPlaces>>,
     selectActive: (id: string) => void,
-    currentActive: string
+    currentActive: string,
+    userAddress: Address
 }
 ) => {
+    const {
+        location
+    } = useGeoLocation()
     const scrollRef = useRef<HTMLDivElement>()
     const [elRefs, setElRefs] = useState([]);
     const windowsSize = window.innerWidth
@@ -91,6 +99,7 @@ export const MapCarousel = ({
                             <div className={styles.content}>
                                 <h3 className={styles.name}>{place.name}</h3>
                                 <p className={styles.description}>{place.description}</p>
+                                <p className={styles.distance}>{distanceCal(location || userAddress, place.address).toFixed(2)} km</p>
                                 <Link href={ROUTES.PLACE(place.id)} className={styles.link}>
                                     Ver <FaArrowRight />
                                 </Link>

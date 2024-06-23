@@ -1,5 +1,6 @@
 import clsx from 'clsx'
 import styles from './index.module.scss'
+import LoaderSpinner from '@core/LoaderSpinner'
 
 
 export default function Button(
@@ -9,6 +10,7 @@ export default function Button(
         variety = 'primary',
         onClick,
         type = 'button',
+        isLoading,
         ...props
     }: {
         children: React.ReactNode,
@@ -18,6 +20,7 @@ export default function Button(
         disabled?: boolean,
         type?: 'button' | 'submit',
         href?: string,
+        isLoading?: boolean
 
     } & React.HTMLAttributes<HTMLButtonElement>
 ) {
@@ -29,6 +32,7 @@ export default function Button(
             type={type}
             {...props}
         >
+            {isLoading && <LoaderSpinner size='20px' />}
             <span className={styles.text}>{children}</span>
         </button>
     )

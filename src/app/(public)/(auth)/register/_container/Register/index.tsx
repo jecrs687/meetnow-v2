@@ -16,10 +16,8 @@ import Button from '@core/Button';
 import LoaderSpinner from '@core/LoaderSpinner';
 function Submit() {
     const status = useFormStatus();
-    return <Button disabled={status.pending} type='submit'>
-        {
-            status.pending ? <LoaderSpinner size={'25px'} /> : 'Cadastrar'
-        }
+    return <Button isLoading={status.pending} disabled={status.pending} type='submit'>
+        Cadastrar
     </Button>
 }
 

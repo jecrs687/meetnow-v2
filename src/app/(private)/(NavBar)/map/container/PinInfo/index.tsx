@@ -18,19 +18,21 @@ export const MarkerWithInfowindow = ({
         photos,
         id },
     setActive,
-    currentActive
+    currentActive,
+    distance
 }: {
     place: Awaited<ReturnType<typeof getPlaces>>[0],
     setActive: (id: string) => void,
-    currentActive: string
+    currentActive: string,
+    distance: number
 }
 ) => {
     const [infowindowOpen, setInfowindowOpen] = useReducer((x) => !x, false);
-    const [markerRef, marker] = useMarkerRef();
+    const [markerRef, marker] = useAdvancedMarkerRef();
 
     return (
         <>
-            <Marker
+            <AdvancedMarker
                 ref={markerRef}
                 onClick={() => {
                     setInfowindowOpen();
@@ -39,9 +41,11 @@ export const MarkerWithInfowindow = ({
                 position={{ lat, lng }}
                 title={name}
             />
-            <Pin background={'#22ccff'} borderColor={'#1e89a1'} scale={1.4}>
-                👀
-            </Pin>
+            <Pin
+                background={'#0f9d58'}
+                borderColor={'#006425'}
+                glyphColor={'#60d98f'}
+            />
             {(infowindowOpen &&
                 currentActive === id
             ) && (
@@ -61,6 +65,7 @@ export const MarkerWithInfowindow = ({
                             </div>
                             <h3 className={styles.name}>{name}</h3>
                             <p className={styles.description}>{description}</p>
+                            <p className={styles.distance}>{distance} km</p>
                             <Link href={ROUTES.PLACE(id)} className={styles.link}>
                                 Ver <FaArrowRight />
                             </Link>

@@ -5,6 +5,10 @@ import { getPlaces } from './actions';
 import { MarkerWithInfowindow } from './container/PinInfo';
 import { MapCarousel } from './container/MapCarousel';
 import styles from './index.module.scss'
+import { set } from 'date-fns';
+import { getUser } from '@backend/repository/user';
+import { distanceCal } from '@utils/distanceCalc';
+import LoaderSpinner from '@core/LoaderSpinner';
 
 
 export default function Page() {
@@ -16,26 +20,59 @@ export default function Page() {
         lat: 0,
         lng: 0
     })
+    const [zoom, setZoom] = useState(15)
+    const [user, setUser] = useState<
+        Awaited<ReturnType<typeof getUser>>
+    >(null)
     useEffect(() => {
         getPlaces().then(setPlaces)
+        getUser().then(setUser).catch(console.error)
     }, [])
+
     const navigateLatLng = (
-        lat,
-        lng,
-        latTarget,
-        lngTarget
+        {
+            current,
+            target,
+            initial
+        }
     ) => {
+
+        const {
+            lat: latInitial,
+            lng: lngInitial
+        } = initial
+        const {
+            lat: latTarget,
+            lng: lngTarget
+        } = target
+        let
+            {
+                lat,
+                lng
+            } = current
+
         if (lat < latTarget)
-            lat = lat + 1
+            lat = lat + 0.005
         if (lng < lngTarget)
-            lng = lng + 1
+            lng = lng + 0.005
+
+        // const difference = Math.abs(lat - latTarget) + Math.abs(lng - lngTarget)
+        // const initialDifference = Math.abs(latInitial - latTarget) + Math.abs(lngInitial - lngTarget)
+        // const isOutZoom = difference > initialDifference / 2
+        // const distance = Math.abs(difference - (initialDifference / 2))
+        // const zoomStep = Math.round(distance * 50)
+        // const zoomApplied = isOutZoom ? zoom + zoomStep : zoom - zoomStep
+        // const currentZoom = Math.min(15, Math.max(6, zoomApplied))
+        // setZoom(currentZoom)
+
         setPosition({ lat, lng })
 
         if (lat < latTarget || lng < lngTarget) {
             setTimeout(() => {
-                navigateLatLng(lat, lng, latTarget, lngTarget)
+                navigateLatLng({ current: { lat, lng }, target, initial })
             }, 100)
         } else {
+            setZoom(15)
             setPosition({ lat: latTarget, lng: lngTarget })
         }
 
@@ -45,32 +82,43 @@ export default function Page() {
         if (!places.length) return
         const placeActive = places.find(place => place.id === active)?.address
             || places[0].address
-        navigateLatLng(
-            position.lat,
-            position.lng,
-            placeActive.lat,
-            placeActive.lng
+        navigateLatLng({
+            current: position,
+            target: placeActive,
+            initial: position
+        }
         )
+        setZoom(15)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [active])
-    if (!places.length) return (<div>Loading...</div>)
+    useEffect(() => {
+        if (!places.length) return
+        setActive(places[0].id)
+        setPosition(places[0].address)
+    }, [places])
+    if (!places.length || !user) return (<div style={{
+        width: '100vw',
+        height: '100vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+
+    }}><LoaderSpinner /></div>)
     const windowHeight = window.innerHeight
     return <div className={styles.container}>
-        <APIProvider apiKey='AIzaSyAnaF6_gvSaYf9qCpHsViyM_-3LJPcB7Bc'>
+        <APIProvider apiKey='AIzaSyAnaF6_gvSaYf9qCpHsViyM_-3LJPcB7Bc' libraries={['marker']}>
             <Map
                 style={{ width: '100vw', height: '100vh' }}
-                defaultCenter={{
-                    lat: places[0].address.lat,
-                    lng: places[0].address.lng
-                }}
                 defaultZoom={15}
+                zoom={zoom}
+                disableDefaultUI
 
                 gestureHandling={'greedy'}
-                disableDefaultUI={true}
+                mapId='3fb975962afb9410'
                 minZoom={6}
                 {...(active) ? {
                     center: {
-                        lat: position.lat - 0.000002 * windowHeight,
+                        lat: position.lat - 0.000005 * windowHeight,
                         lng: position.lng
                     }
                 } : {}}
@@ -78,7 +126,7 @@ export default function Page() {
                 {
                     places.map((place) => {
                         return <MarkerWithInfowindow
-
+                            distance={distanceCal(user.address, place.address)}
                             place={place}
                             key={place.id}
                             setActive={setActive}
@@ -92,6 +140,7 @@ export default function Page() {
                     places={places}
                     selectActive={(id) => setActive(id)}
                     currentActive={active}
+                    userAddress={user.address}
                 />
             </div>
         </APIProvider>

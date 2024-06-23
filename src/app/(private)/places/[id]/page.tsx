@@ -1,11 +1,6 @@
 import prisma from "@backend/configs/database"
 import styles from './page.module.scss'
-import Image from "next/image"
-import { firstLetterUpper } from "@utils/firstLetterUpper"
 import { Carousel } from "@common/Carousel"
-import { validateToken } from "@utils/token"
-import { cookies } from "next/headers"
-import { TOKEN_KEY } from "@utils/envs"
 import { FaGripLines, FaRegUser, FaStar } from "react-icons/fa"
 import Button from "@core/Button"
 import { BackButton } from "@common/BackButton"
@@ -58,17 +53,6 @@ export default async function Page({
                 </div>
                 <div className={styles.description}>
                     {place.description}
-                    <pre>
-                        {
-                            JSON.stringify(place, null, 5)
-                        }
-                    </pre>
-                    <pre>
-                        {
-                            JSON.stringify(place, null, 5)
-                        }
-                    </pre>
-
                 </div>
 
 
