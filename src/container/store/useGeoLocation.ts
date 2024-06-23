@@ -1,3 +1,4 @@
+import { storage } from '@utils/storage';
 import { create } from 'zustand';
 
 type GeoLocationProps = {
@@ -10,8 +11,7 @@ type GeoLocationProps = {
 }
 
 export const useGeoLocation = create<GeoLocationProps>((set) => ({
-    location: localStorage.getItem('location') ? JSON.parse(localStorage.getItem('location')) : null
-    ,
+    location: storage().get('location'),
     setLocation: (lat: number, lng: number) => {
         set({
             location: {
@@ -19,9 +19,9 @@ export const useGeoLocation = create<GeoLocationProps>((set) => ({
                 lng
             }
         })
-        localStorage.setItem('location', JSON.stringify({
+        storage().set('location', {
             lat,
             lng
-        }))
+        })
     }
 }));
