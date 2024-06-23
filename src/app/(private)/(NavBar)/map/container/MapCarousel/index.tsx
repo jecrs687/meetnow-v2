@@ -46,6 +46,13 @@ export const MapCarousel = ({
             current.removeEventListener('scroll', handleScroll)
         }
     }, [cardSize, places, scrollRef, selectActive, elRefs, paddingSize])
+    useEffect(() => {
+        if (!scrollRef.current) return
+        const index = places.findIndex(place => place.id === currentActive)
+        if (index === -1) return
+        const left = index * (cardSize + 30)
+        scrollRef.current.scroll(left, 0)
+    }, [cardSize, currentActive, places])
     return (
         <div className={styles.container}
             ref={scrollRef}

@@ -54,7 +54,7 @@ export default function Page() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [active])
     if (!places.length) return (<div>Loading...</div>)
-
+    const windowHeight = window.innerHeight
     return <div className={styles.container}>
         <APIProvider apiKey='AIzaSyAnaF6_gvSaYf9qCpHsViyM_-3LJPcB7Bc'>
             <Map
@@ -64,14 +64,26 @@ export default function Page() {
                     lng: places[0].address.lng
                 }}
                 defaultZoom={15}
+
                 gestureHandling={'greedy'}
                 disableDefaultUI={true}
                 minZoom={6}
-                {...(active) ? { center: position } : {}}
+                {...(active) ? {
+                    center: {
+                        lat: position.lat - 0.000002 * windowHeight,
+                        lng: position.lng
+                    }
+                } : {}}
             >
                 {
                     places.map((place) => {
-                        return <MarkerWithInfowindow {...place} key={place.id} />
+                        return <MarkerWithInfowindow
+
+                            place={place}
+                            key={place.id}
+                            setActive={setActive}
+                            currentActive={active}
+                        />
                     })
                 }
             </Map>
