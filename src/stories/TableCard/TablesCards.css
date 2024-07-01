@@ -1,0 +1,103 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap");
+
+.card {
+    font-family: "Montserrat", sans-serif;
+    max-width: 355px;
+    border-radius: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 16px;
+    background-color: white;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.card-content {
+    padding: 16px;
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+}
+
+.card-title {
+    flex-grow: 1;
+}
+
+.card-title p {
+    margin: 4px 0 0;
+    color: gray;
+    font-size: 0.9em;
+    display: -webkit-box;
+    -webkit-line-clamp: 4; /* Número de linhas que você deseja exibir */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px; /* Ajuste conforme necessário */
+  }
+  
+
+.card-title h6 {
+    margin: 0;
+    font-size: 1.1em;
+    display: flex;
+    align-items: center;
+}
+
+
+
+.card-title p {
+    margin: 4px 0 0;
+    color: gray;
+    font-size: 0.9em;
+}
+
+.share-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: gray;
+    font-size: 18px;
+}
+
+.card-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding: 24px;
+    border-top: 1px solid #f0f0f0;
+ }
+
+.participate-button {
+    color: #C72886;
+    border: none;
+    font-size: 0.9em;
+    position: absolute;
+    font-weight: 800;
+}
+
+.participants {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: gray;
+    font-size: 1.2em;
+    position: absolute;
+    right: 0;
+    margin-right: 8px;
+}
+
+.text-input-textarea {
+    resize: none; /* Remove o redimensionamento visível */
+    min-height: 100px; /* Altura mínima para o textarea */
+  }
+
+ 
