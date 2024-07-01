@@ -1,7 +1,7 @@
 // src/components/TextInput.stories.tsx
 import type { Meta, StoryObj } from '@storybook/react';
 import TextInput from './TextInput';
-import { FaRegUser, FaRegEnvelope, FaRegClock, FaPhone } from 'react-icons/fa';
+import { FaRegClock, FaRegEnvelope, FaRegUser } from 'react-icons/fa';
 
 const meta: Meta<typeof TextInput> = {
   title: 'Components/TextInput',
@@ -42,16 +42,6 @@ export const WithEmailIcon: Story = {
   },
 };
 
-export const WithPhoneIcon: Story = {
-  args: {
-    label: 'Telefone',
-    placeholder: 'Digite seu telefone',
-    value: '+233 55 706 7955',
-    type: 'tel',
-    icon: <FaPhone />,
-  },
-};
-
 export const WithPasswordIcon: Story = {
   args: {
     label: 'Senha',
@@ -67,5 +57,15 @@ export const WithoutIcon: Story = {
     label: 'Sem Ícone',
     placeholder: 'Digite algo',
     value: '',
+  },
+};
+
+export const Multiline: Story = {
+  args: {
+    label: 'Sem Ícone',
+    placeholder: 'Digite algo',
+    value: '',
+    multiline: true,
+    icon: <FaRegClock />,
   },
 };
