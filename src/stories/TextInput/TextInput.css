@@ -54,6 +54,7 @@
 .text-input-textarea {
   resize: none; /* Remove o redimensionamento visível */
   min-height: 100px; /* Altura mínima para o textarea */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .text-input-value {
