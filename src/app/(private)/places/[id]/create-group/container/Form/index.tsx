@@ -14,6 +14,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@constants/ROUTES";
 import LoaderSpinner from "@core/LoaderSpinner";
+import { ShowIf } from "@common/ShowIf";
 
 const ValidationSchema = z.object(
     {
@@ -31,10 +32,12 @@ export type FormValues = z.infer<typeof ValidationSchema>;
 export function GroupCreationForm({
     id
 }) {
+
     const [modalSuccess, setModalSuccess] = useState<string>()
     const [isLoading, setIsLoading] = useState<boolean>()
-
+    const [step, setStep] = useState(0)
     const router = useRouter();
+
     const submit = async (values) => {
         try {
             setIsLoading(true)
@@ -54,7 +57,6 @@ export function GroupCreationForm({
                 setIsLoading(true)
                 const route = ROUTES.GROUP(modalSuccess)
                 router.push(route)
-                setIsLoading(false)
             }
             }
         />
@@ -63,7 +65,7 @@ export function GroupCreationForm({
                 name: '',
                 description: '',
                 quantity: 0,
-                date: new Date().toISOString(),
+                date: null,
                 time: new Date(),
                 duration: 30
             }}
@@ -79,63 +81,77 @@ export function GroupCreationForm({
             onSubmit={submit}
         >
             <Form className={styles.form}>
+                <ShowIf onlyHide condition={step === 0}>
+                    <h3 className={styles.step_title}>
+                        Informações do evento
+                    </h3>
+                    <Field
+                        name="date"
+                        component={FormikFieldDateTimePicker}
+                        inputVariant="outlined"
+                        label="Data do evento"
+                        type="date"
+                        format="dd/MM/yyyy"
+                        helperText=""
+                        clearable
+                        className={styles.timePicker}
+                    />
 
-                <Field
-                    name="date"
-                    component={FormikFieldDateTimePicker}
-                    inputVariant="outlined"
-                    label="Data do evento"
-                    type="date"
-                    format="dd/MM/yyyy"
-                    helperText=""
-                    clearable
-                    className={styles.timePicker}
-                />
+                    <br />
+                    <TimePicker
+                        name="time"
+                        label="Hora do evento"
+                        className={styles.timePicker}
+                    />
+                    <br />
+                    <Field
+                        component={SelectField}
+                        label="Duração do evento"
+                        name="duration"
+                        options={[
+                            { value: 30, label: "30 minutos" },
+                            { value: 60, label: "1 hora" },
+                            { value: 90, label: "1 hora e meia" },
+                            { value: 120, label: "2 horas" },
+                            { value: 150, label: "2 horas e meia" },
+                            { value: 180, label: "3 horas" },
+                            { value: 210, label: "3 horas e meia" },
+                            { value: 240, label: "4 horas" },
+                        ]}
+                    />
+                </ShowIf>
 
-                <br />
-                <TimePicker
-                    name="time"
-                    label="Hora do evento"
-                    className={styles.timePicker}
-                />
-                <br />
+                <ShowIf onlyHide condition={step === 1}>
+                    <h3 className={styles.step_title}>
+                        Informações da mesa
+                    </h3>
+                    <Field
+                        name="name"
+                        title="Nome da mesa"
+                        placeholder="Nome da mesa"
+                        component={Input}
+                    />
+                    <Field
+                        name="description"
+                        title="Descrição"
+                        placeholder="Descrição"
+                        component={Input}
+                    />
+                    <Field
+                        name="quantity"
+                        type="number"
+                        title="Quantidade de pessoas"
+                        placeholder="Quantidade de pessoas"
+                        component={Input}
+                    />
+                </ShowIf>
 
-                <Field
-                    component={SelectField}
-                    label="Duração do evento"
-                    name="duration"
-                    options={[
-                        { value: 30, label: "30 minutos" },
-                        { value: 60, label: "1 hora" },
-                        { value: 90, label: "1 hora e meia" },
-                        { value: 120, label: "2 horas" },
-                        { value: 150, label: "2 horas e meia" },
-                        { value: 180, label: "3 horas" },
-                        { value: 210, label: "3 horas e meia" },
-                        { value: 240, label: "4 horas" },
-                    ]}
-                />
-                <Field
-                    name="name"
-                    title="Nome da mesa"
-                    placeholder="Nome da mesa"
-                    component={Input}
-                />
-                <Field
-                    name="description"
-                    title="Descrição"
-                    placeholder="Descrição"
-                    component={Input}
-                />
-                <Field
-                    name="quantity"
-                    type="number"
-                    title="Quantidade de pessoas"
-                    placeholder="Quantidade de pessoas"
-                    component={Input}
-                />
-                <Button type="submit">
-                    Criar grupo
+                <Button
+                    className={styles.button}
+                    type={step != 1 ? 'button' : 'submit'}
+                    onClick={() => setStep(step + 1)}
+                >
+                    {step != 1 ? 'Próximo' : 'Criar mesa'}
                 </Button>
             </Form>
         </Formik>

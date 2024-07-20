@@ -4,10 +4,9 @@
 .place-card {
   font-family: "Montserrat", sans-serif;
   position: relative;
-  width: 200px;
+  min-width: 200px;
   height: 300px;
   border-radius: 15px;
-  overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   background-size: cover;
   background-position: center;
@@ -58,6 +57,10 @@
   padding: 8px 10px;
   border-radius: 50px;
   font-style: italic;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
 }
 
 .place-card-rating {

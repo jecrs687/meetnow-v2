@@ -11,6 +11,9 @@ CREATE TYPE "ParticipantRole" AS ENUM ('OWNER', 'GUEST');
 CREATE TYPE "Status" AS ENUM ('ACTIVE', 'INACTIVE', 'PENDING');
 
 -- CreateEnum
+CREATE TYPE "ParticipantStatus" AS ENUM ('ACCEPTED', 'PENDING', 'REJECTED', 'CANCELED', 'DELETED', 'BLOCKED', 'DECLINED');
+
+-- CreateEnum
 CREATE TYPE "Category" AS ENUM ('RESTAURANT', 'BAR', 'CAFE', 'PUB', 'CLUB', 'LOUNGE', 'OTHER');
 
 -- CreateEnum
@@ -96,7 +99,7 @@ CREATE TABLE "Participant" (
     "id" TEXT NOT NULL,
     "user_id" TEXT NOT NULL,
     "group_id" TEXT NOT NULL,
-    "status" "Status" NOT NULL,
+    "status" "ParticipantStatus" NOT NULL DEFAULT 'PENDING',
     "role" "ParticipantRole" NOT NULL DEFAULT 'GUEST',
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,

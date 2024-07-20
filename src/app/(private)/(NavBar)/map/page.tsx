@@ -1,7 +1,6 @@
 "use client"
 import { APIProvider, AdvancedMarker, Map, Marker, Pin, } from '@vis.gl/react-google-maps';
 import { useEffect, useState } from 'react';
-import { getPlaces } from './actions';
 import { MarkerWithInfowindow } from './container/PinInfo';
 import { MapCarousel } from './container/MapCarousel';
 import styles from './index.module.scss'
@@ -9,9 +8,16 @@ import { set } from 'date-fns';
 import { getUser } from '@backend/repository/user';
 import { distanceCal } from '@utils/distanceCalc';
 import LoaderSpinner from '@core/LoaderSpinner';
+import { useGeoLocation } from '@store/useGeoLocation';
+import { getPlaces } from '@actions/places';
+import Loading from 'src/app/loading';
+import { Loader } from '@core/Loader';
 
 
 export default function Page() {
+    const {
+        location
+    } = useGeoLocation()
     const [places, setPlaces] = useState<
         Awaited<ReturnType<typeof getPlaces>>
     >([])
@@ -36,21 +42,9 @@ export default function Page() {
             initial
         }
     ) => {
-
-        const {
-            lat: latInitial,
-            lng: lngInitial
-        } = initial
-        const {
-            lat: latTarget,
-            lng: lngTarget
-        } = target
-        let
-            {
-                lat,
-                lng
-            } = current
-
+        const { lat: latInitial, lng: lngInitial } = initial
+        const { lat: latTarget, lng: lngTarget } = target
+        let { lat, lng } = current
         if (lat < latTarget)
             lat = lat + 0.005
         if (lng < lngTarget)
@@ -96,14 +90,7 @@ export default function Page() {
         setActive(places[0].id)
         setPosition(places[0].address)
     }, [places])
-    if (!places.length || !user) return (<div style={{
-        width: '100vw',
-        height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center'
-
-    }}><LoaderSpinner /></div>)
+    if (!places.length || !user) return <Loader />
     const windowHeight = window.innerHeight
     return <div className={styles.container}>
         <APIProvider apiKey='AIzaSyAnaF6_gvSaYf9qCpHsViyM_-3LJPcB7Bc' libraries={['marker']}>
@@ -112,16 +99,20 @@ export default function Page() {
                 defaultZoom={15}
                 zoom={zoom}
                 disableDefaultUI
-
                 gestureHandling={'greedy'}
                 mapId='3fb975962afb9410'
+                onZoomChanged={(e) => {
+                    setZoom(e.map.getZoom())
+                }}
                 minZoom={6}
                 {...(active) ? {
                     center: {
                         lat: position.lat - 0.000005 * windowHeight,
                         lng: position.lng
                     }
-                } : {}}
+                } : {
+                    center: location
+                }}
             >
                 {
                     places.map((place) => {

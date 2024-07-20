@@ -8,8 +8,13 @@ export const getPlaces = async (
     return await prisma.place.findMany({
         include: {
             address: true,
-            photos: true
+            photos: true,
+            _count: {
+                select: {
+                    groups: true
+                }
+            }
         }
     })
-
 }
+

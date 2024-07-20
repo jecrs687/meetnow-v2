@@ -28,46 +28,72 @@
     display: flex;
     align-items: center;
     width: 100%;
-    height: 100%;
-    padding: 20px;
-    border-radius: 10px;
-    background-color: rgba(255, 255, 255, 0.5);
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    height: 600px;
+    border-radius: 40px;
     transition: all 0.5s;
+    position: relative;
+    width: 100%;
+    background: transparent;
+    overflow: hidden;
 
-    &:hover {
-        background-color: rgba(255, 255, 255, 0.8);
-    }
+    &:hover {}
 
     .carousel {
-        margin: 0px 10px;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 20px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        filter: blur(1px) brightness(0.6);
+        z-index: -2;
+
     }
 
     .content {
+        display: flex;
+        color: white;
+        width: 100%;
+        height: 100%;
         margin-right: auto;
+        flex-direction: column;
+        padding: max(4dvh, 3dvw);
+        z-index: 0;
 
         .title {
+            height: 100%;
+            overflow: hidden;
 
             .name {
-                font-size: 18px;
-                font-weight: 500;
+                font-size: 24px;
+                font-weight: 600;
+
+                &::first-letter {
+                    text-transform: uppercase;
+                }
             }
 
             .description {
-                font-size: 14px;
-                font-weight: 500;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                display: -webkit-box;
-                -webkit-line-clamp: 4;
-                -webkit-box-orient: vertical;
+                font-size: 18px;
+                width: 100%;
+                height: 100%;
+                overflow: scroll;
+
+                &::-webkit-scrollbar {
+                    display: none;
+                }
             }
         }
 
         .participants {
             display: flex;
+            flex: 1;
             gap: 10px;
             margin-bottom: 10px;
+            margin-top: auto;
+            // justify-content: center;
+            align-items: center;
+            text-transform: uppercase;
+
 
             .participant {
                 h5 {
@@ -80,9 +106,11 @@
 
     .information {
         display: flex;
-        flex-direction: column;
         justify-content: space-between;
         height: 80px;
+        width: 100%;
+        align-items: center;
+        gap: 25px;
 
         .duration {
             h5 {
@@ -99,7 +127,6 @@
         .footer {
             display: flex;
             gap: 5px;
-            margin-top: auto;
             align-items: center;
         }
     }

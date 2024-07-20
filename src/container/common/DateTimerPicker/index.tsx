@@ -54,9 +54,8 @@ const FormikFieldDateTimePicker = ({
 }: FormikFieldDateTimePickerProps) => {
     const CustomTag = componentTypes[type];
     const currentError = form.errors[field.name];
-
     const pickerValue = getDateForPicker(field.value, timezone);
-
+    console.log({ currentError })
     const handleChange = date => {
         if (date === null) {
             form.setFieldValue(field.name, null, true);

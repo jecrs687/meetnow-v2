@@ -8,6 +8,7 @@ interface PlaceCardProps {
   title: string;
   rating: number;
   showFavorite: boolean;
+  onClick?: () => void;
 }
 
 const PlaceCard: React.FC<PlaceCardProps> = ({
@@ -15,8 +16,9 @@ const PlaceCard: React.FC<PlaceCardProps> = ({
   title,
   rating,
   showFavorite,
+  onClick,
 }) => (
-  <div className="place-card" style={{ backgroundImage: `url(${image})` }}>
+  <div onClick={onClick} className="place-card" style={{ backgroundImage: `url(${image})` }}>
     <div className="place-card-content">
       <div className="place-card-header">
         <span className="place-card-title">{title}</span>

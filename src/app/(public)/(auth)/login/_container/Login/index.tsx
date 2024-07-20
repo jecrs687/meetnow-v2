@@ -15,10 +15,9 @@ import { ROUTES } from '@constants/ROUTES';
 
 function Submit() {
     const status = useFormStatus();
-    return <Button disabled={status.pending} type='submit'>
-        {
-            status.pending ? <LoaderSpinner /> : 'Login'
-        }
+    return <Button disabled={status.pending} isLoading={status.pending} type='submit'>
+        Entrar
+
     </Button>
 }
 

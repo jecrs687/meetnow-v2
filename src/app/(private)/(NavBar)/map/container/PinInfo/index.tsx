@@ -1,6 +1,6 @@
 import { AdvancedMarker, InfoWindow, Marker, Pin, useAdvancedMarkerRef, useMarkerRef } from "@vis.gl/react-google-maps";
 import { useReducer, useState } from "react";
-import { getPlaces } from "../../actions";
+import { getPlaces } from "../../../../../../backend/actions/places";
 import styles from './index.module.scss'
 import Link from "next/link";
 import { ROUTES } from "@constants/ROUTES";

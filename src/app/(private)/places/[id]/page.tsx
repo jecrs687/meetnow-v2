@@ -1,7 +1,7 @@
 import prisma from "@backend/configs/database"
 import styles from './page.module.scss'
 import { Carousel } from "@common/Carousel"
-import { FaGripLines, FaRegUser, FaStar } from "react-icons/fa"
+import { FaGripLines, FaPlus, FaRegUser, FaStar } from "react-icons/fa"
 import Button from "@core/Button"
 import { BackButton } from "@common/BackButton"
 import Link from "next/link"
@@ -16,7 +16,12 @@ export default async function Page({
             id
         },
         include: {
-            photos: true
+            photos: true,
+            _count: {
+                select: {
+                    groups: true
+                }
+            }
         }
     })
 
@@ -60,11 +65,11 @@ export default async function Page({
         </div>
         <div className={styles.footer}>
             <Link href={ROUTES.CREATE_GROUP(id)} className={styles.icon}>
-                <FaGripLines className={styles.icon_button} />
+                <FaPlus className={styles.icon_button} />
             </Link>
             <Link href={ROUTES.PLACE_GROUPS(id)} className={styles.button}>
                 <Button >
-                    Mesa
+                    Mesas ({place._count.groups})
                 </Button>
             </Link>
             <Link href={ROUTES.CREATE_GROUP(id)} className={styles.icon}>

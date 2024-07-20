@@ -1,4 +1,4 @@
-// src/components/Tabs.tsx
+"use client";
 import React, { useState } from 'react';
 import './Tabs.css';
 
@@ -32,7 +32,7 @@ const Tabs: React.FC<TabsProps> = ({ tabs }) => {
         ))}
       </div>
       <div className="tab-content">
-        {tabs[activeTab] && tabs[activeTab].content}
+        {tabs[activeTab]?.content}
       </div>
     </div>
   );

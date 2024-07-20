@@ -6,7 +6,7 @@ import { validateToken } from "@utils/token";
 import { TOKEN_KEY } from "@utils/envs";
 import { cookies } from "next/headers";
 import { getUserId } from "@backend/utils/getUserId";
-import { ParticipantRole, Status } from "@prisma/client";
+import { ParticipantRole, ParticipantStatus, Status } from "@prisma/client";
 import { getUser } from "@backend/repository/user";
 
 
@@ -32,7 +32,7 @@ export async function onSubmit(values: FormValues & { placeId: string }) {
                 create: {
                     role: ParticipantRole.OWNER,
                     userId: user.id,
-                    status: Status.ACTIVE
+                    status: ParticipantStatus.ACCEPTED
                 }
             }
         }

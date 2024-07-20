@@ -1,5 +1,5 @@
 import { createRef, useEffect, useRef, useState } from "react";
-import { getPlaces } from "../../actions";
+import { getPlaces } from "../../../../../../backend/actions/places";
 import styles from './index.module.scss';
 import Link from "next/link";
 import { ROUTES } from "@constants/ROUTES";
@@ -99,6 +99,9 @@ export const MapCarousel = ({
                             <div className={styles.content}>
                                 <h3 className={styles.name}>{place.name}</h3>
                                 <p className={styles.description}>{place.description}</p>
+                                <p className={styles.count}>
+                                    {place._count.groups} grupos
+                                </p>
                                 <p className={styles.distance}>{distanceCal(location || userAddress, place.address).toFixed(2)} km</p>
                                 <Link href={ROUTES.PLACE(place.id)} className={styles.link}>
                                     Ver <FaArrowRight />

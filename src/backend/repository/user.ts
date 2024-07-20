@@ -12,7 +12,8 @@ export const getUser = async () => {
             id: await getUserId()
         },
         include: {
-            address: true
+            address: true,
+            photos: true
         }
     });
 }

@@ -31,17 +31,6 @@ export default async function Page({
     return <div className={styles.container}>
         <BackButton />
         <div className={styles.place}>
-            <div className={styles.photos}>
-                <Carousel height={'300px'} width="100%" images={place.photos.map(photo => photo.url)} />
-            </div>
-            <div className={styles.header}>
-                <div className={styles.title}>
-                    {place.name}
-                </div>
-                <div className={styles.review}>
-
-                </div>
-            </div>
             <div className={styles.body}>
                 <GroupCreationForm id={id} />
             </div>

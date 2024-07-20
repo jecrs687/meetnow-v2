@@ -1,9 +1,5 @@
-import prisma from "@backend/configs/database"
+"use client";
 import styles from './page.module.scss'
-import { Carousel } from "@common/Carousel"
-import { validateToken } from "@utils/token"
-import { cookies } from "next/headers"
-import { TOKEN_KEY } from "@utils/envs"
 import { FaPlus } from "react-icons/fa"
 import { BackButton } from "@common/BackButton"
 import Link from "next/link"
@@ -11,42 +7,81 @@ import { ROUTES } from "@constants/ROUTES"
 import { getPlaceWithUsersById } from "@backend/repository/place"
 import { GroupCard } from "./container/GroupCard"
 import { COLORS } from "@styles/modules"
-export default async function Page({
+import { getUser } from "@backend/repository/user"
+import { useCallback, useEffect, useState } from 'react';
+import TinderCard from 'react-tinder-card'
+import LoaderSpinner from '@core/LoaderSpinner';
+import { declineParticipateAction, requestParticipateAction } from '@backend/actions/group';
+
+export default function Page({
     params: { id }
 }) {
-    const { decoded } = validateToken(cookies().get(TOKEN_KEY).value)
-    const user = await prisma.user.findFirst({
-        where: {
-            id: decoded.id
+    const [loading, setLoading] = useState(true)
+    const [place, setPlace] = useState<
+        Awaited<ReturnType<typeof getPlaceWithUsersById>>
+    >(null)
+    const [groups, setGroups] = useState<
+        Awaited<ReturnType<typeof getPlaceWithUsersById>>['groups']
+    >(null)
+    const [user, setUser] = useState<
+        Awaited<ReturnType<typeof getUser>>
+    >(null)
+    const getData = useCallback(async () => {
+        setLoading(true)
+        const [user, place] = await Promise.all([
+            getUser(),
+            getPlaceWithUsersById(id)
+        ])
+        setPlace(place)
+        setGroups(place.groups)
+        setUser(user)
+        setLoading(false)
+    }, [id])
+    useEffect(() => {
+        getData()
+    }, [getData])
+    if (loading) return <div
+        style={
+            {
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100%',
+                width: '100%'
+            }
+        }>
+        <LoaderSpinner />
+    </div>
+    const handleSwipe = (id: string) => (direction: 'left' | 'right') => {
+        setGroups(groups.filter(group => group.id !== id))
+        if (direction === 'right') {
+            declineParticipateAction({ id })
+        } else {
+            requestParticipateAction({ id })
         }
-    });
-    const place = await getPlaceWithUsersById(id)
-
-    if (!place) return <h1>
-        Place not found
-    </h1>
-
+    }
     return <div className={styles.container}>
         <BackButton />
         <div className={styles.place}>
-            <div className={styles.photos}>
-                <Carousel height={'300px'} width="100%" images={place.photos.map(photo => photo.url)} />
-            </div>
-            <div className={styles.header}>
-                <div className={styles.title}>
-                    Grupos
-                </div>
-            </div>
             <div className={styles.body}>
-
-
                 <div className={styles.groups}>
                     {
-                        place.groups.map(
-                            (group) => (
-                                <GroupCard group={group} key={group.id} />
+                        groups
+                            .map(
+                                (group, i) => (
+                                    <div
+                                        key={group.id}
+                                        className={styles.swipe}
+                                        style={{ zIndex: i }}
+                                    >
+                                        <TinderCard
+                                            onSwipe={handleSwipe(group.id)}
+                                        >
+                                            <GroupCard group={group} key={group.id} />
+                                        </TinderCard>
+                                    </div>
+                                )
                             )
-                        )
                     }
                 </div>
 
