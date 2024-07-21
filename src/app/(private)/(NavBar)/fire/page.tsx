@@ -22,9 +22,7 @@ export default function Page() {
     }, [])
     if (!groups) return <Loader />
     const handleSwipe = (id: string) => (direction: 'left' | 'right') => {
-        setGroups(
-            groups => groups.filter(group => group.id !== id)
-        )
+        setGroups(groups.filter(group => group.id !== id))
         if (direction === 'right') {
             declineParticipateAction({ id })
         } else {
