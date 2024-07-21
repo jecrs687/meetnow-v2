@@ -31,7 +31,7 @@ export default async function Page({
                     {
                         group.participants.map(participant =>
                             <div key={participant.id} className={styles.participant}>
-                                <div className={styles.avatar}>
+                                <div className={styles.photos}>
                                     {
                                         participant.user.photos.map(photo =>
                                             <Image

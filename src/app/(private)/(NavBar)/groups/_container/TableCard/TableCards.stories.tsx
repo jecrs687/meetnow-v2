@@ -20,8 +20,9 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
+    max: 10,
     name: 'Fernando',
-    age: 23,
+    scheduledAt: "23",
     description: 'Ambiente agradável. Em busca de companhia e beber uma cerveja.',
     participants: 5,
     avatar: 'https://i.imgur.com/YcP0tik.jpeg',
