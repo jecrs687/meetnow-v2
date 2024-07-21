@@ -52,3 +52,41 @@ export const declineParticipateAction = async ({
     })
     return participant;
 }
+
+export const getGroupByUser = async () => {
+    const user = await getUser();
+    const groups = await prisma.group.findMany({
+        orderBy: {
+            date: 'asc'
+        },
+        where: {
+            participants: {
+                some: {
+                    AND: [
+                        {
+                            user: {
+                                id: user.id
+                            }
+                        },
+                        {
+                            OR: [
+                                {
+                                    status: ParticipantStatus.ACCEPTED
+                                },
+                                {
+                                    status: ParticipantStatus.PENDING
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+        },
+        include: {
+            participants: true,
+            photos: true,
+            place: true
+        }
+    })
+    return groups;
+}

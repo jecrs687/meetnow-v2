@@ -12,7 +12,11 @@ export async function getGroup(id: string) {
         include: {
             participants: {
                 include: {
-                    user: true
+                    user: {
+                        include: {
+                            photos: true
+                        }
+                    }
                 }
             },
             chat: {

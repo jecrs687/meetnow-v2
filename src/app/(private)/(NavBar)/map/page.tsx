@@ -26,7 +26,7 @@ export default function Page() {
         lat: 0,
         lng: 0
     })
-    const [zoom, setZoom] = useState(20)
+    const [zoom, setZoom] = useState(15)
     const [user, setUser] = useState<
         Awaited<ReturnType<typeof getUser>>
     >(null)
@@ -94,7 +94,7 @@ export default function Page() {
         <APIProvider apiKey='AIzaSyAnaF6_gvSaYf9qCpHsViyM_-3LJPcB7Bc' libraries={['marker']}>
             <Map
                 style={{ width: '100vw', height: '100vh' }}
-                defaultZoom={17}
+                defaultZoom={12}
                 disableDefaultUI
                 zoom={zoom}
                 gestureHandling={'greedy'}

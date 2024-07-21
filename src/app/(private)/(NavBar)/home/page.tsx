@@ -3,7 +3,7 @@ import { getUser } from "@backend/repository/user";
 import Header from "./_container/Header/Header";
 import Tabs from "./_container/Tabs/Tabs";
 import PlaceCard from "./_container/PlaceCard/PlaceCard";
-import TablesCards from "./_container/TableCard/TablesCards";
+import TablesCards from "../groups/_container/TableCard/TablesCards";
 import dayjs from "dayjs";
 import styles from './page.module.scss';
 import { useEffect, useState } from "react";
