@@ -26,7 +26,7 @@ export default function Page() {
         lat: 0,
         lng: 0
     })
-    const [zoom, setZoom] = useState(15)
+    const [zoom, setZoom] = useState(20)
     const [user, setUser] = useState<
         Awaited<ReturnType<typeof getUser>>
     >(null)
@@ -66,7 +66,6 @@ export default function Page() {
                 navigateLatLng({ current: { lat, lng }, target, initial })
             }, 100)
         } else {
-            setZoom(15)
             setPosition({ lat: latTarget, lng: lngTarget })
         }
 
@@ -82,7 +81,6 @@ export default function Page() {
             initial: position
         }
         )
-        setZoom(15)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [active])
     useEffect(() => {
@@ -96,9 +94,9 @@ export default function Page() {
         <APIProvider apiKey='AIzaSyAnaF6_gvSaYf9qCpHsViyM_-3LJPcB7Bc' libraries={['marker']}>
             <Map
                 style={{ width: '100vw', height: '100vh' }}
-                defaultZoom={15}
-                zoom={zoom}
+                defaultZoom={17}
                 disableDefaultUI
+                zoom={zoom}
                 gestureHandling={'greedy'}
                 mapId='3fb975962afb9410'
                 onZoomChanged={(e) => {
@@ -107,7 +105,7 @@ export default function Page() {
                 minZoom={6}
                 {...(active) ? {
                     center: {
-                        lat: position.lat - 0.000005 * windowHeight,
+                        lat: position.lat - 0.000005 * windowHeight / zoom,
                         lng: position.lng
                     }
                 } : {
