@@ -1,9 +1,9 @@
 .search-input {
     display: flex;
     align-items: center;
-    background-color: #f0f5ff;
+    background-color: #EDF3FB;
     border-radius: 25px;
-    padding: 10px 15px;
+    padding: 16px 15px;
   }
   
   .search-icon {

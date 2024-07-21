@@ -2,6 +2,7 @@
 import React from "react";
 import "./PlaceCard.css";
 import { FaStar, FaHeart } from "react-icons/fa";
+import Image from "next/image";
 
 interface PlaceCardProps {
   image: string;
@@ -9,6 +10,8 @@ interface PlaceCardProps {
   rating: number;
   showFavorite: boolean;
   onClick?: () => void;
+  distance?: string;
+  groups: number;
 }
 
 const PlaceCard: React.FC<PlaceCardProps> = ({
@@ -17,8 +20,18 @@ const PlaceCard: React.FC<PlaceCardProps> = ({
   rating,
   showFavorite,
   onClick,
+  distance,
+  groups
 }) => (
-  <div onClick={onClick} className="place-card" style={{ backgroundImage: `url(${image})` }}>
+  <div onClick={onClick} className="place-card">
+    <Image
+      src={image}
+      alt={title}
+      className="place-card-image"
+      loading="lazy"
+      width={200}
+      height={200}
+    />
     <div className="place-card-content">
       <div className="place-card-header">
         <span className="place-card-title">{title}</span>
@@ -29,7 +42,12 @@ const PlaceCard: React.FC<PlaceCardProps> = ({
           <FaStar color="gold" />
           <span className="rating-text">{rating}</span>
         </div>
-
+        <div className="place-card-rating">
+          {distance} km
+        </div>
+        <div className="place-card-rating">
+          {groups} grupos
+        </div>
         {showFavorite && (
           <span className="place-card-favorite">
             <FaHeart color="red" />

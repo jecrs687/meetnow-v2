@@ -4,8 +4,8 @@
 .place-card {
   font-family: "Montserrat", sans-serif;
   position: relative;
-  min-width: 200px;
   height: 300px;
+  min-width: 250px;
   border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   background-size: cover;
@@ -35,7 +35,17 @@
 .place-card:active::before {
     opacity: 0.3;
 }
+.place-card-image{
+  border-radius: 15px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
 
+}
 .place-card-content {
   padding: 4px;
   border-radius: 10px;

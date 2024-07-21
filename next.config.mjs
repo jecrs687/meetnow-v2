@@ -66,7 +66,7 @@ const nextConfig = {
         });
     },
     images: {
-        minimumCacheTTL: 360,
+        minimumCacheTTL: 3600,
         remotePatterns: [
             {
                 protocol: 'https',

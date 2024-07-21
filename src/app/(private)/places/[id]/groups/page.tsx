@@ -5,7 +5,7 @@ import { BackButton } from "@common/BackButton"
 import Link from "next/link"
 import { ROUTES } from "@constants/ROUTES"
 import { getPlaceWithUsersById } from "@backend/repository/place"
-import { GroupCard } from "./container/GroupCard"
+import { GroupCard } from "@common/GroupCard"
 import { COLORS } from "@styles/modules"
 import { getUser } from "@backend/repository/user"
 import { useCallback, useEffect, useState } from 'react';
