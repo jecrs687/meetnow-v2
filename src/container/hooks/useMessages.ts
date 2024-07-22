@@ -3,10 +3,10 @@ import { getMessagesAction } from "@backend/actions/chat";
 import { useCallback, useEffect, useState } from "react";
 
 const useOldMessages = ({
-    groupId
+    chatId
 }) => {
     const [messages, setMessages] = useState([]);
-    const localStorageName = `chat-${groupId}`;
+    const localStorageName = `chat-${chatId}`;
     const setMessagesMiddleware = useCallback(async (messages) => {
         localStorage.setItem(localStorageName, JSON.stringify(messages));
         setMessages(messages);
@@ -18,15 +18,15 @@ const useOldMessages = ({
             const msgs = JSON.parse(messages);
             setMessages(msgs);
             getMessagesAction({
-                groupId,
+                chatId: chatId,
                 lastMessageId: msgs[msgs.length - 1].id
             }).then(setMessagesMiddleware);
         } else {
             getMessagesAction({
-                groupId
+                chatId
             }).then(setMessagesMiddleware);
         }
-    }, [groupId, localStorageName, setMessagesMiddleware]);
+    }, [chatId, localStorageName, setMessagesMiddleware]);
 
     return {
         messages
