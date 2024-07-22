@@ -1,11 +1,15 @@
 "use server";
 import { TOKEN_KEY } from "@utils/envs"
 import { validateToken } from "@utils/token"
-import { cookies } from "next/headers"
+import { cookies, headers } from "next/headers"
 
-export async function getUserId(): Promise<string> {
+export async function getUserId(): Promise<
+    ReturnType<typeof validateToken>['decoded']
+    | null
+> {
     const cookie = cookies().get(TOKEN_KEY)
-    if (!cookie) return ""
-    const { decoded } = validateToken(cookie.value)
-    return decoded.id
+    if (cookie) return validateToken(cookie.value).decoded
+    const header = headers().get('Authorization')
+    if (header) return validateToken(header).decoded
+    return null
 }

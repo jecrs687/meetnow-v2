@@ -9,7 +9,7 @@ import { redirect } from "next/navigation";
 export const getUser = async () => {
     return await prisma.user.findFirst({
         where: {
-            id: await getUserId()
+            id: (await getUserId()).id
         },
         include: {
             address: true,
@@ -21,7 +21,7 @@ export const getUser = async () => {
 export const setUserPosition = async (lat: number, lng: number) => {
     await prisma.user.update({
         where: {
-            id: await getUserId()
+            id: (await getUserId()).id
         },
         data: {
             address: {

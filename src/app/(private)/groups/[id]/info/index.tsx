@@ -40,6 +40,7 @@ export default async function Page({
                                                 alt={participant.user.name}
                                                 width={40}
                                                 height={40}
+                                                className={styles.photo}
                                             />)
 
                                     }
@@ -53,21 +54,23 @@ export default async function Page({
                 </div>
             </div>
             <div className={styles.footer}>
-                <Link
-                    className={styles.link}
-                    href={ROUTES.GROUP_PARTICIPANTS(id)}>
-                    Participants
-                </Link>
-                <Link
-                    className={styles.link}
-                    href={ROUTES.GROUP_INVITES(id)}>
-                    Invites
-                </Link>
-                <Link
-                    className={styles.link}
-                    href={ROUTES.GROUP_SETTINGS(id)}>
-                    Settings
-                </Link>
+                <div className={styles.buttons}>
+                    <Link
+                        className={styles.button}
+                        href={ROUTES.GROUP_PARTICIPANTS(id)}>
+                        Participants
+                    </Link>
+                    <Link
+                        className={styles.button}
+                        href={ROUTES.GROUP_INVITES(id)}>
+                        Invites
+                    </Link>
+                    <Link
+                        className={styles.button}
+                        href={ROUTES.GROUP_SETTINGS(id)}>
+                        Settings
+                    </Link>
+                </div>
             </div>
         </div>)
 }

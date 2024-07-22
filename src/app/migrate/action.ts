@@ -3,6 +3,7 @@ import prisma from "@backend/configs/database"
 import { GroupStatus, ParticipantRole, ParticipantStatus, Status, User, UserRole, Group, Category } from "@prisma/client"
 import { faker } from '@faker-js/faker';
 import { promisePoll } from "@utils/promisePoll";
+import { encryptPassword } from "@utils/encrypt";
 
 
 const randomPhotoUrl = () => {
@@ -28,7 +29,7 @@ const generateAddress = () => ({
 const generateUser = (partial?: Partial<Omit<User, 'id' | 'addressId'>>) => ({
     name: faker.person.fullName(),
     email: faker.internet.email(),
-    password: 'b3a7ac6b46ccfe3fb3ea57b0601edf7467db27d9a8e29e86f4cb97a0cb323073',
+    password: encryptPassword('123456'),
     activatedAt: faker.date.recent(),
     gender: faker.person.gender(),
     bio: faker.lorem.paragraphs(),
@@ -77,9 +78,6 @@ const generateGroup = () => ({
         GroupStatus.CLOSED,
         GroupStatus.HIDDEN
     ]),
-    chat: {
-        create: {}
-    },
     participants: {
         create: generateParticipant()
     },
@@ -118,6 +116,11 @@ const createUsers = async () => {
 }
 
 export default async function migrate() {
+    await prisma.messageReaction.deleteMany()
+    await prisma.messageReaction.deleteMany()
+    await prisma.messageStatus.deleteMany()
+    await prisma.message.deleteMany()
+    await prisma.chat.deleteMany()
     await prisma.photo.deleteMany()
     await prisma.placePhoto.deleteMany()
     await prisma.groupPhoto.deleteMany()
@@ -162,6 +165,9 @@ export default async function migrate() {
         >(async () => prisma.group.create({
             data: {
                 ...generateGroup(),
+                chat: {
+                    create: {}
+                },
                 place: {
                     connect: {
                         id: place.id

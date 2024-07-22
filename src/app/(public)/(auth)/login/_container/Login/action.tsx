@@ -11,11 +11,11 @@ export async function submit(currentState: any, form: FormData) {
         email: form.get('email')?.toString().toLocaleLowerCase(),
         password: form.get('password')?.toString()
     };
-
+    const encryptedPassword = encryptPassword(payload.password);
     const login = await prisma.user.findFirst({
         where: {
             email: payload.email,
-            password: encryptPassword(payload.password)
+            password: encryptedPassword
         }
     });
 

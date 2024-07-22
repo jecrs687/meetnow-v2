@@ -19,17 +19,7 @@ export async function getGroup(id: string) {
                     }
                 }
             },
-            chat: {
-                include: {
-                    messages: {
-                        include: {
-                            medias: true,
-                            user: true,
-                            reply: true,
-                        }
-                    }
-                }
-            },
+            chat: true,
             photos: true,
             place: true
         }
