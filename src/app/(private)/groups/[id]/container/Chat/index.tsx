@@ -16,7 +16,7 @@ type ChatProps = {
 export function Chat({ group }: ChatProps) {
     const { messages, getMessages } = useMessages();
     const [currentGroup, setCurrentGroup] = useState(group);
-    const UPDATE_INTERVAL = 2500;
+    const UPDATE_INTERVAL = 2000;
     useEffect(() => {
         let interval;
         if (!group.chat) createChatAction({ groupId: group.id }).then(

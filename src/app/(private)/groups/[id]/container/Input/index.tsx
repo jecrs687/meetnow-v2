@@ -33,20 +33,20 @@ export const Input = () => {
     }, [clearMessages])
     return (
         <div className={styles.container}>
-            <form onSubmit={(e) => sendMessage(message)}>
-                <input
-                    className={styles.input}
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                />
-                <button className={styles.button}
-                    onClick={() => {
-                        sendMessage(message);
-                    }}
-                >
-                    <MdSend />
-                </button>
-            </form>
+            <input
+                className={styles.input}
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+            />
+            <button
+                type="button"
+                className={styles.button}
+                onClick={() => {
+                    sendMessage(message);
+                }}
+            >
+                <MdSend />
+            </button>
 
         </div>
     )

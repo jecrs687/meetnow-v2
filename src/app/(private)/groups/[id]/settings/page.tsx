@@ -1,10 +1,9 @@
 import { BackButton } from "@common/BackButton";
 
-export default async function Page() {
-
+export default function Page() {
     return <h1>
         <BackButton />
 
-        temp
+
     </h1>
 }

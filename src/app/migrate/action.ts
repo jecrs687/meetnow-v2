@@ -135,9 +135,17 @@ export default async function migrate() {
             data: {
                 ...generateUser(),
                 role: UserRole.ADMIN,
+                email: 'demo2@demo.com'
+            }
+        })
+        await prisma.user.create({
+            data: {
+                ...generateUser(),
+                role: UserRole.ADMIN,
                 email: 'demo@demo.com'
             }
         })
+
     } catch (e) {
         console.log(e)
     }
