@@ -43,5 +43,11 @@
 
 .owner {
     background-color: $ninth;
-    margin: 10px 0px 0px auto;
+    display: flex;
+    justify-content: flex-end;
+
+    .content {
+
+        background-color: green;
+    }
 }

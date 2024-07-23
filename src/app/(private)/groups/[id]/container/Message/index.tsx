@@ -17,7 +17,7 @@ export const Message = (
     message: Awaited<ReturnType<typeof getMessagesAction>>[0],
     index: number
 ) => {
-    const isOwner = validateToken(getCookie(TOKEN_KEY)).decoded.id == message.id
+    const isOwner = validateToken(getCookie(TOKEN_KEY)).decoded.id == message.userId || !message.userId
     return (
         <div className={
             clsx(

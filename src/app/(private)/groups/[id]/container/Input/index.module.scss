@@ -16,7 +16,8 @@
     background-color: $initial;
     border-radius: 10px;
     padding: 5px;
-    margin: 10px 0px;
+    margin: 0px 0px 5px;
+    padding: 10px;
 
     .input {
         width: 100%;
@@ -24,8 +25,9 @@
         background-color: $initial;
         color: white;
         font-size: 14px;
-        padding: 5px;
+        padding: 10px;
         border-radius: 10px;
+
     }
 
     .button {
