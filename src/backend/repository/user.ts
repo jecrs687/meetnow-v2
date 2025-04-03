@@ -9,7 +9,7 @@ import { redirect } from "next/navigation";
 export const getUser = async () => {
     return await prisma.user.findFirst({
         where: {
-            id: (await getUserId()).id
+            id: (await getUserId())?.id
         },
         include: {
             address: true,

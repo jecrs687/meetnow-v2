@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -34,11 +34,12 @@
     "dayjs": "^1.11.12",
     "formik": "^2.4.6",
     "jsonwebtoken": "^9.0.2",
-    "next": "14.2.3",
+    "next": "15.2.4",
+    "next-auth": "^4.24.11",
     "nodemailer": "^6.9.13",
     "raw-loader": "^4.0.2",
-    "react": "^18",
-    "react-dom": "^18",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
     "react-select": "^5.8.0",
     "react-tinder-card": "^1.6.4",
     "sass": "^1.77.5",
@@ -56,14 +57,18 @@
     "@storybook/react": "^8.1.10",
     "@storybook/test": "^8.1.10",
     "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
+    "@types/react": "19.1.0",
+    "@types/react-dom": "19.1.1",
     "eslint": "^8",
-    "eslint-config-next": "14.2.3",
+    "eslint-config-next": "15.2.4",
     "eslint-plugin-storybook": "^0.8.0",
     "prisma": "5.15.0",
     "react-icons": "^5.2.1",
     "storybook": "^8.1.10",
     "typescript": "^5"
+  },
+  "resolutions": {
+    "@types/react": "19.1.0",
+    "@types/react-dom": "19.1.1"
   }
 }

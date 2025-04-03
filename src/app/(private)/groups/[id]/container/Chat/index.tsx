@@ -2,7 +2,7 @@
 import { getGroup } from '@backend/repository/group'
 import styles from './index.module.scss'
 import { useCallback, useEffect, useState } from 'react';
-import { createChatAction, getMessagesAction } from '@backend/actions/chat';
+import { createChatAction, getMessagesAction } from '@backend/actions/chat.action';
 import { Message } from '../Message';
 import { Input } from '../Input';
 import { useMessages } from '@store/useMessages';

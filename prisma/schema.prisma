@@ -11,40 +11,123 @@ datasource db {
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
+// ===== Core User Models =====
+
 model User {
   id                 String        @id @default(cuid())
   email              String        @unique
   name               String?
   password           String
-  gender             String?
-  photos             Photo[]
+  
+  // Profile information
   bio                String?
+  gender             String?
   birthday           DateTime?
-  numberActiveGroups Int           @default(0) @map("number_active_groups")
-  Participant        Participant[]
-  createdAt          DateTime      @default(now()) @map("created_at")
-  updatedAt          DateTime      @updatedAt @map("updated_at")
-  activatedAt        DateTime?     @map("activated_at")
+  phoneNumber        String?       @map("phone_number")
+  
+  // Verification and safety
+  isEmailVerified    Boolean       @default(false) @map("is_email_verified")
+  isPhoneVerified    Boolean       @default(false) @map("is_phone_verified")
+  isIdentityVerified Boolean       @default(false) @map("is_identity_verified")
+  safetyRating       Float?        @map("safety_rating")
+  
+  // Status fields
+  status             UserStatus    @default(ACTIVE)
   role               UserRole      @default(USER)
-  status             Status        @default(ACTIVE)
+  lastActive         DateTime?     @map("last_active")
+  profileCompleteness Float        @default(0) @map("profile_completeness")
+  activatedAt        DateTime?     @map("activated_at")
+  
+  // Activity tracking
+  activeGroupCount   Int           @default(0) @map("active_group_count")
+  
+  // Location
   address            Address?      @relation(fields: [addressId], references: [id])
   addressId          String?       @map("address_id")
-  Message            Message[]
+  
+  // Timestamps
+  createdAt          DateTime      @default(now()) @map("created_at")
+  updatedAt          DateTime      @updatedAt @map("updated_at")
+  
+  // Relationships
+  media              Media[]       @relation("userMedia")
+  memberships        Membership[]
+  messages           Message[]     @relation("userMessages")
+  reactions          Reaction[]
+  matches            Match[]       @relation("userMatches")
+  matchesReceived    Match[]       @relation("targetMatches")
+  interests          UserInterest[]
+  savedPlaces        SavedPlace[]
+  reviews            Review[]
+  dietaryPreferences UserDietaryPreference[]
+  waitlistEntries    WaitlistEntry[]
+  billsCreated       BillSplit[]
+  billItemsConsumed  BillItemConsumer[]
+  billShares         BillShare[]
+  achievements       UserAchievement[]
+  notifications      Notification[]
+  
+  // One-to-one relations
+  privacySettings    UserPrivacySetting?
+  points             UserPoints?
+  
+  // Chats
+  chatsAsParticipant ChatParticipant[]
+  sentMessages       Message[]       @relation("sentMessages")
+  readMessages       Message[]       @relation("readMessages")
+  deliveredMessages  Message[]       @relation("deliveredMessages")
+  directChats        DirectChat[]
 
-  MessageReaction MessageReaction[]
-
-
-  MessageStatusDelivered MessageStatus[] @relation("delivered", map: "message_status_delivered") 
-
-  MessageStatusRead MessageStatus[] @relation("readed", map: "message_status_read")
+  @@index([email])
+  @@index([status])
+  @@index([lastActive])
 }
 
-model Photo {
-  id     String @id @default(cuid())
-  url    String
-  user   User   @relation(fields: [userId], references: [id])
-  userId String @map("user_id")
+// ===== Media Models =====
+
+model Media {
+  id          String        @id @default(cuid())
+  url         String
+  type        MediaType
+  fileSize    Int?          @map("file_size")
+  description String?
+  
+  // Polymorphic relationship - media can belong to various entities
+  entityType  EntityType
+  
+  // Owner relationships
+  user        User?         @relation("userMedia", fields: [userId], references: [id], onDelete: SetNull)
+  userId      String?       @map("user_id")
+  
+  place       Place?        @relation(fields: [placeId], references: [id], onDelete: Cascade)
+  placeId     String?       @map("place_id")
+  
+  group       Group?        @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId     String?       @map("group_id")
+  
+  event       Event?        @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  eventId     String?       @map("event_id")
+  
+  message     Message?      @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  messageId   String?       @map("message_id")
+  
+  // Gallery relationship
+  gallery     Gallery?      @relation(fields: [galleryId], references: [id], onDelete: Cascade)
+  galleryId   String?       @map("gallery_id")
+  
+  // Timestamps
+  likes       Int           @default(0)
+  createdAt   DateTime      @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@index([placeId])
+  @@index([groupId])
+  @@index([eventId])
+  @@index([messageId])
+  @@index([entityType])
 }
+
+// ===== Location Models =====
 
 model Address {
   id        String   @id @default(cuid())
@@ -57,166 +140,683 @@ model Address {
   zip       String?
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
+  
+  // Relations
   users     User[]
   places    Place[]
+  events    Event[]
+  
+  @@index([city, state, country])
+  @@index([lat, lng])
 }
 
+// ===== Place Models =====
+
 model Place {
-  id          String       @id @default(cuid())
-  name        String
-  address     Address      @relation(fields: [addressId], references: [id])
-  addressId   String       @map("address_id")
-  description String
-  review      Int
-  categories  Category[]
-  photos      PlacePhoto[]
-  groups      Group[]
+  id             String           @id @default(cuid())
+  name           String
+  description    String
+  
+  // Location
+  address        Address          @relation(fields: [addressId], references: [id])
+  addressId      String           @map("address_id")
+  
+  // Business information
+  averageRating  Float            @default(0) @map("average_rating")
+  priceRange     PriceRange       @default(MODERATE)
+  website        String?
+  phoneNumber    String?          @map("phone_number")
+  capacity       Int?
+  
+  // Metadata
+  categories     Category[]
+  amenities      String[]
+  tags           String[]
+  
+  // Media
+  media          Media[]
+  
+  // Operations
+  operatingHours OperatingHours[]
+  
+  // Relations
+  groups         Group[]
+  reviews        Review[]
+  savedBy        SavedPlace[]
+  
+  // Timestamps
+  createdAt      DateTime         @default(now()) @map("created_at")
+  updatedAt      DateTime         @updatedAt @map("updated_at")
+  
+  @@index([name])
+  @@index([averageRating])
+  @@index([priceRange])
+  @@index([addressId])
 }
+
+model OperatingHours {
+  id        String   @id @default(cuid())
+  place     Place    @relation(fields: [placeId], references: [id], onDelete: Cascade)
+  placeId   String   @map("place_id")
+  dayOfWeek Int      // 0-6 for Sunday-Saturday
+  openTime  DateTime
+  closeTime DateTime
+  isOpen    Boolean  @default(true) @map("is_open")
+
+  @@unique([placeId, dayOfWeek])
+}
+
+// ===== Group & Event Models =====
 
 model Group {
   id           String        @id @default(cuid())
-  number       Int
   name         String?
+  description  String
+  
+  // Core details
   place        Place         @relation(fields: [placeId], references: [id])
   placeId      String        @map("place_id")
+  
+  // Schedule
+  startTime    DateTime?     @map("start_time")
+  endTime      DateTime?     @map("end_time")
+  rsvpDeadline DateTime?     @map("rsvp_deadline")
+  
+  // Configuration
+  maxCapacity  Int?          @map("max_capacity")
+  minAge       Int?          @map("min_age")
+  maxAge       Int?          @map("max_age")
   status       GroupStatus   @default(ACTIVE)
-  date         DateTime?
-  time         DateTime?
-  duration     Int?
-  description  String
+  visibility   Visibility    @default(PUBLIC)
+  
+  // Financial
+  costEstimate Decimal?      @map("cost_estimate") @db.Decimal(10, 2)
+  costCurrency String        @default("USD") @map("cost_currency")
+  
+  // Appearance
+  dress        DressCode?    @default(CASUAL)
+  isFeatured   Boolean       @default(false) @map("is_featured")
+  
+  // Metadata
+  tags         String[]
+  dietaryOptions DietaryOption[]
+  customFields Json?         @map("custom_fields")
+  
+  // Related entities
+  memberships  Membership[]
+  events       Event[]
+  media        Media[]
+  bills        BillSplit[]
+  galleries    Gallery[]
   chat         Chat?
-  photos       GroupPhoto[]
+  waitlist     Waitlist?
+  
+  // Timestamps
   createdAt    DateTime      @default(now()) @map("created_at")
   updatedAt    DateTime      @updatedAt @map("updated_at")
-  participants Participant[]
+  
+  @@index([placeId])
+  @@index([status])
+  @@index([visibility])
+  @@index([isFeatured])
+  @@index([startTime])
 }
 
-model Participant {
+model Event {
+  id            String         @id @default(cuid())
+  title         String
+  description   String
+  
+  // Location and group
+  location      Address        @relation(fields: [locationId], references: [id])
+  locationId    String         @map("location_id")
+  group         Group?         @relation(fields: [groupId], references: [id])
+  groupId       String?        @map("group_id")
+  
+  // Schedule
+  startDate     DateTime       @map("start_date")
+  endDate       DateTime       @map("end_date")
+  isRecurring   Boolean        @default(false) @map("is_recurring")
+  recurrencePattern String?    @map("recurrence_pattern")
+  
+  // Configuration
+  maxAttendees  Int?           @map("max_attendees")
+  visibility    Visibility     @default(PUBLIC)
+  status        EventStatus    @default(SCHEDULED)
+  organizerId   String         @map("organizer_id")
+  
+  // Ticketing
+  ticketRequired Boolean       @default(false) @map("ticket_required")
+  ticketPrice   Decimal?       @map("ticket_price") @db.Decimal(10, 2)
+  ticketCurrency String        @default("USD") @map("ticket_currency")
+  
+  // Metadata
+  categories    EventCategory[]
+  
+  // Relations
+  memberships   Membership[]
+  media         Media[]
+  galleries     Gallery[]
+  chat          Chat?
+  
+  // Timestamps
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+  
+  @@index([groupId])
+  @@index([status])
+  @@index([startDate])
+  @@index([visibility])
+}
+
+// ===== Membership System (unified for Groups and Events) =====
+
+model Membership {
+  id            String            @id @default(cuid())
+  
+  // User relationship
+  user          User              @relation(fields: [userId], references: [id])
+  userId        String            @map("user_id")
+  
+  // Can belong to either a group or an event
+  group         Group?            @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId       String?           @map("group_id")
+  event         Event?            @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  eventId       String?           @map("event_id")
+  
+  // Status and role
+  status        MembershipStatus  @default(PENDING)
+  role          RoleType          @default(MEMBER)
+  
+  // Event-specific fields
+  checkInTime   DateTime?         @map("check_in_time")
+  
+  // Timestamps
+  joinedAt      DateTime          @default(now()) @map("joined_at")
+  updatedAt     DateTime          @updatedAt @map("updated_at")
+  
+  // Note: Application code must ensure a membership belongs to either a group or an event, not both or neither
+  
+  // Unique constraints to prevent duplicates
+  @@unique([userId, groupId])
+  @@unique([userId, eventId])
+  
+  // Indexes for performance
+  @@index([groupId, status])
+  @@index([eventId, status])
+  @@index([userId, role])
+}
+
+// ===== Gallery System =====
+
+model Gallery {
+  id          String    @id @default(cuid())
+  title       String?
+  description String?
+  
+  // Can belong to either a group or an event
+  group       Group?    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId     String?   @map("group_id")
+  event       Event?    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  eventId     String?   @map("event_id")
+  
+  // Photos
+  media       Media[]
+  
+  // Timestamps
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  
+  // Note: Application code must ensure a gallery belongs to either a group or an event, not both or neither
+  
+  @@index([groupId])
+  @@index([eventId])
+}
+
+// ===== Chat System =====
+
+model Chat {
+  id           String           @id @default(cuid())
+  
+  // Can belong to either a group or an event
+  group        Group?           @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId      String?          @unique @map("group_id")
+  event        Event?           @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  eventId      String?          @unique @map("event_id")
+  
+  // Type and status
+  type         ChatType         @default(GROUP)
+  isActive     Boolean          @default(true) @map("is_active")
+  
+  // Messages and participants
+  messages     Message[]
+  participants ChatParticipant[]
+  
+  // Timestamps
+  createdAt    DateTime         @default(now()) @map("created_at")
+  updatedAt    DateTime         @updatedAt @map("updated_at")
+  
+  // Note: You'll need to implement validation in your application code to ensure
+  // that a chat belongs to either a group or an event, not both or neither
+}
+
+model ChatParticipant {
+  id          String    @id @default(cuid())
+  
+  // Relationships
+  chat        Chat      @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  chatId      String    @map("chat_id")
+  user        User      @relation(fields: [userId], references: [id])
+  userId      String    @map("user_id")
+  
+  // Role and status
+  role        RoleType  @default(MEMBER)
+  isMuted     Boolean   @default(false) @map("is_muted")
+  
+  // Timestamps
+  joinedAt    DateTime  @default(now()) @map("joined_at")
+  lastReadAt  DateTime? @map("last_read_at") 
+  
+  @@unique([chatId, userId])
+  @@index([chatId])
+  @@index([userId])
+}
+
+model Message {
+  id          String        @id @default(cuid())
+  text        String?       @db.VarChar(1000)
+  
+  // Relationships
+  chat        Chat          @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  chatId      String        @map("chat_id")
+  sender      User          @relation("sentMessages", fields: [senderId], references: [id])
+  senderId    String        @map("sender_id")
+  
+  // Threading
+  parentId    String?       @map("parent_id")
+  parent      Message?      @relation("replies", fields: [parentId], references: [id])
+  replies     Message[]     @relation("replies")
+  
+  // Media attachments
+  media       Media[]
+  
+  // Reactions
+  reactions   Reaction[]
+  
+  // Status tracking
+  readBy      User[]        @relation("readMessages")
+  deliveredTo User[]        @relation("deliveredMessages")
+  
+  // Soft delete
+  deletedAt   DateTime?     @map("deleted_at")
+  
+  // Timestamps
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+  
+  @@index([chatId])
+  @@index([senderId])
+  @@index([parentId])
+  @@index([createdAt])
+  @@index([deletedAt])
+  User User[] @relation("userMessages")
+}
+
+model Reaction {
+  id          String    @id @default(cuid())
+  type        String
+  
+  // Relationships
+  message     Message   @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  messageId   String    @map("message_id")
+  user        User      @relation(fields: [userId], references: [id])
+  userId      String    @map("user_id")
+  
+  // Timestamp
+  createdAt   DateTime  @default(now()) @map("created_at")
+  
+  @@unique([messageId, userId, type])
+  @@index([messageId])
+  @@index([userId])
+}
+
+// ===== Direct Messaging =====
+
+model DirectChat {
+  id           String         @id @default(cuid())
+  
+  // Participants 
+  users        User[]
+  
+  // Messages
+  messages     DirectMessage[]
+  
+  // Status
+  isBlocked    Boolean        @default(false) @map("is_blocked")
+  
+  // Timestamps
+  lastActivity DateTime        @default(now()) @map("last_activity")
+  createdAt    DateTime        @default(now()) @map("created_at")
+  updatedAt    DateTime        @updatedAt @map("updated_at")
+  
+  @@index([lastActivity])
+}
+
+model DirectMessage {
+  id            String        @id @default(cuid())
+  text          String?       @db.VarChar(1000)
+  
+  // Relationships
+  chat          DirectChat    @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  chatId        String        @map("chat_id")
+  senderId      String        @map("sender_id")
+  
+  // Read status
+  isRead        Boolean       @default(false) @map("is_read")
+  readAt        DateTime?     @map("read_at")
+  
+  // Media content
+  media         String[]
+  
+  // Soft delete
+  deletedAt     DateTime?     @map("deleted_at")
+  
+  // Timestamps
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
+  
+  @@index([chatId])
+  @@index([senderId])
+  @@index([isRead])
+  @@index([createdAt])
+}
+
+// ===== Matching System =====
+
+model Match {
+  id                String      @id @default(cuid())
+  
+  // User relationships
+  user              User        @relation("userMatches", fields: [userId], references: [id])
+  userId            String      @map("user_id")
+  target            User        @relation("targetMatches", fields: [targetId], references: [id])
+  targetId          String      @map("target_id")
+  
+  // Match details
+  compatibilityScore Float       @map("compatibility_score")
+  status            MatchStatus  @default(PENDING)
+  
+  // Timestamps
+  createdAt         DateTime     @default(now()) @map("created_at")
+  updatedAt         DateTime     @updatedAt @map("updated_at")
+  
+  @@unique([userId, targetId])
+  @@index([userId, status])
+  @@index([targetId, status])
+}
+
+// ===== Interest System =====
+
+model Interest {
+  id           String         @id @default(cuid())
+  name         String         @unique
+  category     String
+  description  String?
+  userInterests UserInterest[]
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
+  
+  @@index([category])
+}
+
+model UserInterest {
+  id         String    @id @default(cuid())
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String    @map("user_id")
+  interest   Interest  @relation(fields: [interestId], references: [id], onDelete: Cascade)
+  interestId String    @map("interest_id")
+  level      Int       @default(5) // Scale 1-10 for interest level
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
+
+  @@unique([userId, interestId])
+  @@index([userId])
+  @@index([interestId])
+}
+
+// ===== Privacy & Notifications =====
+
+model UserPrivacySetting {
+  id                  String   @id @default(cuid())
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId              String   @unique @map("user_id")
+  showEmail           Boolean  @default(false) @map("show_email")
+  showPhone           Boolean  @default(false) @map("show_phone")
+  showBirthday        Boolean  @default(false) @map("show_birthday")
+  showLocation        Boolean  @default(true) @map("show_location")
+  allowMatching       Boolean  @default(true) @map("allow_matching")
+  allowRecommendations Boolean  @default(true) @map("allow_recommendations")
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String           @map("user_id")
+  type      NotificationType
+  content   String
+  isRead    Boolean          @default(false) @map("is_read")
+  relatedId String?          @map("related_id")
+  createdAt DateTime         @default(now()) @map("created_at")
+  expiresAt DateTime?        @map("expires_at")
+  
+  @@index([userId, isRead])
+  @@index([userId, createdAt])
+  @@index([expiresAt])
+}
+
+// ===== Place Interactions =====
+
+model SavedPlace {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String   @map("user_id")
+  place     Place    @relation(fields: [placeId], references: [id], onDelete: Cascade)
+  placeId   String   @map("place_id")
+  notes     String?
+  createdAt DateTime @default(now()) @map("created_at")
+  
+  @@unique([userId, placeId])
+  @@index([userId])
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @map("user_id")
+  place     Place    @relation(fields: [placeId], references: [id])
+  placeId   String   @map("place_id")
+  rating    Float    // 1-5 stars
+  comment   String?
+  photos    String[]
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  
+  @@unique([userId, placeId])
+  @@index([placeId, rating])
+  @@index([userId])
+}
+
+// ===== Waitlist System =====
+
+model Waitlist {
   id        String          @id @default(cuid())
-  user      User            @relation(fields: [userId], references: [id])
-  userId    String          @map("user_id")
-  group     Group           @relation(fields: [groupId], references: [id])
-  groupId   String          @map("group_id")
-  status    ParticipantStatus @default(PENDING)
-  role      ParticipantRole @default(GUEST)
+  group     Group           @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId   String          @unique @map("group_id")
+  entries   WaitlistEntry[]
   createdAt DateTime        @default(now()) @map("created_at")
   updatedAt DateTime        @updatedAt @map("updated_at")
 }
 
-model PlacePhoto {
-  id      String @id @default(cuid())
-  url     String
-  place   Place  @relation(fields: [placeId], references: [id])
-  placeId String @map("place_id")
-}
-
-model GroupPhoto {
-  id      String @id @default(cuid())
-  url     String
-  group   Group  @relation(fields: [groupId], references: [id])
-  groupId String @map("group_id")
-}
-
-model Chat {
-  id        String    @id @default(cuid())
-
-  messages  Message[]
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @updatedAt @map("updated_at")
+model WaitlistEntry {
+  id         String        @id @default(cuid())
+  waitlist   Waitlist      @relation(fields: [waitlistId], references: [id], onDelete: Cascade)
+  waitlistId String        @map("waitlist_id")
+  user       User          @relation(fields: [userId], references: [id])
+  userId     String        @map("user_id")
+  position   Int
+  status     WaitlistStatus @default(WAITING)
+  joinedAt   DateTime      @default(now()) @map("joined_at")
   
-  group     Group    @relation(fields: [groupId], references: [id])
-  groupId   String   @map("group_id") @unique
+  @@unique([waitlistId, userId])
+  @@index([waitlistId, status])
+  @@index([userId])
 }
 
-model Message {
-  id      String    @id @default(cuid())
-  text    String?   @db.VarChar(255)
-  reply   Message?  @relation("ReplyTo", fields: [replyId], references: [id])
-  replyId String?   @map("reply_id")
-  replies Message[] @relation("ReplyTo")
+// ===== Dietary Preferences =====
 
-  medias    MessageMedia[]
-  user      User           @relation(fields: [userId], references: [id])
-  userId    String         @map("user_id")
-  chat      Chat           @relation(fields: [chatId], references: [id])
-  chatId    String         @map("chat_id")
+model UserDietaryPreference {
+  id          String             @id @default(cuid())
+  user        User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String             @map("user_id")
+  preference  DietaryOption
+  notes       String?
+  severity    PreferenceSeverity @default(PREFERENCE)
+  createdAt   DateTime           @default(now()) @map("created_at")
+  updatedAt   DateTime           @updatedAt @map("updated_at")
   
-  reactions MessageReaction[]
-  forwards   Message[] @relation("ForwardTo")
-  forwardFrom Message? @relation("ForwardTo", fields: [forwardFromId], references: [id])
-  forwardFromId String?
-  
-  messageStatus MessageStatus?
-
-
-  deletedAt DateTime?      @map("deleted_at")
-  createdAt DateTime       @default(now()) @map("created_at")
-  updatedAt DateTime       @updatedAt @map("updated_at")
-
+  @@unique([userId, preference])
+  @@index([userId])
 }
 
-// message status for an app chat group
-model MessageStatus{ 
-  id        String @id @default(cuid())
-  
-  delivereds  User[] @relation("delivered")
-  readeds     User[] @relation("readed")
+// ===== Bill Splitting =====
 
-  messageId String  @map("message_id") @unique
-  message Message @relation(fields: [messageId], references: [id])
+model BillSplit {
+  id          String      @id @default(cuid())
+  group       Group       @relation(fields: [groupId], references: [id])
+  groupId     String      @map("group_id")
+  totalAmount Decimal     @map("total_amount") @db.Decimal(10, 2)
+  currency    String      @default("USD")
+  description String?
+  createdBy   User        @relation(fields: [createdById], references: [id])
+  createdById String      @map("created_by_id")
+  status      BillStatus  @default(PENDING)
+  date        DateTime    @default(now())
+  items       BillItem[]
+  shares      BillShare[]
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
   
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  @@index([groupId])
+  @@index([status])
+  @@index([createdById])
 }
 
-
-model MessageReaction{
-  id        String    @id @default(cuid())
-  type      String
-  message   Message   @relation(fields: [messageId], references: [id])
-  messageId String    @map("message_id")
-  user      User      @relation(fields: [userId], references: [id])
-  userId    String    @map("user_id")
+model BillItem {
+  id          String             @id @default(cuid())
+  billSplit   BillSplit          @relation(fields: [billSplitId], references: [id], onDelete: Cascade)
+  billSplitId String             @map("bill_split_id")
+  name        String
+  amount      Decimal            @db.Decimal(10, 2)
+  quantity    Int                @default(1)
+  consumedBy  BillItemConsumer[]
   
-}
-model MessageMedia {
-  id        String    @id @default(cuid())
-  url       String
-  type      MediaType
-  fileSize  Int       @map("file_size")
-  message   Message   @relation(fields: [messageId], references: [id])
-  messageId String    @map("message_id")
+  @@index([billSplitId])
 }
 
-model ChatHistorical {
+model BillItemConsumer {
+  id         String   @id @default(cuid())
+  billItem   BillItem @relation(fields: [billItemId], references: [id], onDelete: Cascade)
+  billItemId String   @map("bill_item_id")
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String   @map("user_id")
+  
+  @@unique([billItemId, userId])
+  @@index([userId])
+}
+
+model BillShare {
+  id          String    @id @default(cuid())
+  billSplit   BillSplit @relation(fields: [billSplitId], references: [id], onDelete: Cascade)
+  billSplitId String    @map("bill_split_id")
+  user        User      @relation(fields: [userId], references: [id])
+  userId      String    @map("user_id")
+  amount      Decimal   @db.Decimal(10, 2)
+  isPaid      Boolean   @default(false) @map("is_paid")
+  paidAt      DateTime? @map("paid_at")
+  
+  @@unique([billSplitId, userId])
+  @@index([userId, isPaid])
+}
+
+// ===== Achievements and Rewards =====
+
+model Achievement {
+  id               String             @id @default(cuid())
+  name             String
+  description      String
+  icon             String
+  category         AchievementCategory
+  pointsValue      Int                @default(0) @map("points_value")
+  isActive         Boolean            @default(true) @map("is_active")
+  userAchievements UserAchievement[]
+  createdAt        DateTime           @default(now()) @map("created_at")
+  updatedAt        DateTime           @updatedAt @map("updated_at")
+  
+  @@index([category])
+  @@index([isActive])
+}
+
+model UserAchievement {
+  id            String      @id @default(cuid())
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        String      @map("user_id")
+  achievement   Achievement @relation(fields: [achievementId], references: [id])
+  achievementId String      @map("achievement_id")
+  earnedAt      DateTime    @default(now()) @map("earned_at")
+  
+  @@unique([userId, achievementId])
+  @@index([userId])
+}
+
+model UserPoints {
   id        String   @id @default(cuid())
-  snapshot  Json     @map("snapshot")
-  createdAt DateTime @default(now()) @map("created_at")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String   @unique @map("user_id")
+  points    Int      @default(0)
+  lifetime  Int      @default(0) @map("lifetime_points")
   updatedAt DateTime @updatedAt @map("updated_at")
 }
 
-enum MediaType {
-  IMAGE
-  VIDEO
-  AUDIO
+// ===== Enums =====
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  PENDING
+  SUSPENDED
 }
 
 enum UserRole {
   ADMIN
+  MODERATOR
   USER
 }
 
-enum ParticipantRole {
+enum RoleType {
   OWNER
+  ADMIN
+  MODERATOR
+  MEMBER
+  ATTENDEE
   GUEST
+  SPEAKER
+  HOST
+  ORGANIZER
 }
 
-enum Status {
-  ACTIVE
-  INACTIVE
-  PENDING
-}
-enum ParticipantStatus {
+enum MembershipStatus {
   ACCEPTED
   PENDING
   REJECTED
@@ -225,6 +825,7 @@ enum ParticipantStatus {
   BLOCKED
   DECLINED
 }
+
 enum Category {
   RESTAURANT
   BAR
@@ -243,4 +844,137 @@ enum GroupStatus {
   INACTIVE
   CLOSED
   HIDDEN
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+  AUDIO
+  DOCUMENT
+}
+
+enum EntityType {
+  USER
+  PLACE
+  GROUP
+  EVENT
+  MESSAGE
+  GALLERY
+}
+
+enum MatchStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  BLOCKED
+}
+
+enum NotificationType {
+  MATCH_REQUEST
+  MATCH_ACCEPTED
+  GROUP_INVITATION
+  GROUP_UPDATE
+  NEW_MESSAGE
+  EVENT_REMINDER
+  PAYMENT_REMINDER
+  ACHIEVEMENT_EARNED
+  SYSTEM
+}
+
+enum PriceRange {
+  BUDGET
+  MODERATE
+  EXPENSIVE
+  LUXURY
+}
+
+enum Visibility {
+  PUBLIC
+  PRIVATE
+  FRIENDS_ONLY
+  INVITE_ONLY
+}
+
+enum DressCode {
+  CASUAL
+  BUSINESS_CASUAL
+  FORMAL
+  THEMED
+  ANY
+}
+
+enum DietaryOption {
+  VEGETARIAN
+  VEGAN
+  GLUTEN_FREE
+  DAIRY_FREE
+  NUT_FREE
+  KOSHER
+  HALAL
+  PESCATARIAN
+  KETO
+  PALEO
+  LOW_CARB
+  OTHER
+}
+
+enum PreferenceSeverity {
+  PREFERENCE
+  RESTRICTION
+  ALLERGY
+  LIFE_THREATENING
+}
+
+enum WaitlistStatus {
+  WAITING
+  INVITED
+  EXPIRED
+  DECLINED
+}
+
+enum EventStatus {
+  SCHEDULED
+  ACTIVE
+  COMPLETED
+  CANCELED
+  POSTPONED
+}
+
+enum EventCategory {
+  DINING
+  NETWORKING
+  ENTERTAINMENT
+  EDUCATION
+  SPORTS
+  OUTDOORS
+  ARTS
+  MUSIC
+  TECH
+  BUSINESS
+  SOCIAL
+  CHARITY
+  CULTURAL
+  FAMILY
+  OTHER
+}
+
+enum AchievementCategory {
+  SOCIAL
+  EXPLORER
+  ORGANIZER
+  LOYALTY
+  SPECIAL
+}
+
+enum BillStatus {
+  PENDING
+  SETTLED
+  DISPUTED
+  CANCELED
+}
+
+enum ChatType {
+  GROUP
+  EVENT
+  DIRECT
 }

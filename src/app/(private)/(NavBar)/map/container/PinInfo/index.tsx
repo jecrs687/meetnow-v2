@@ -1,12 +1,12 @@
 import { AdvancedMarker, InfoWindow, Marker, Pin, useAdvancedMarkerRef, useMarkerRef } from "@vis.gl/react-google-maps";
 import { useReducer, useState } from "react";
-import { getPlaces } from "../../../../../../backend/actions/places";
+import { getPlaces } from "../../../../../../backend/actions/places.action";
 import styles from './index.module.scss'
 import Link from "next/link";
 import { ROUTES } from "@constants/ROUTES";
 import { FaArrowRight } from "react-icons/fa";
 import { Carousel } from "@common/Carousel";
-export const MarkerWithInfowindow = ({
+export const MarkerWithInfoWindow = ({
     place: {
         address: {
             lat,
@@ -27,7 +27,7 @@ export const MarkerWithInfowindow = ({
     distance: number
 }
 ) => {
-    const [infowindowOpen, setInfowindowOpen] = useReducer((x) => !x, false);
+    const [infoWindowOpen, setInfoWindowOpen] = useReducer((x) => !x, false);
     const [markerRef, marker] = useAdvancedMarkerRef();
 
     return (
@@ -35,7 +35,7 @@ export const MarkerWithInfowindow = ({
             <AdvancedMarker
                 ref={markerRef}
                 onClick={() => {
-                    setInfowindowOpen();
+                    setInfoWindowOpen();
                     setActive(id)
                 }}
                 position={{ lat, lng }}
@@ -46,13 +46,13 @@ export const MarkerWithInfowindow = ({
                 borderColor={'#006425'}
                 glyphColor={'#60d98f'}
             />
-            {(infowindowOpen &&
+            {(infoWindowOpen &&
                 currentActive === id
             ) && (
                     <InfoWindow
                         anchor={marker}
                         maxWidth={300}
-                        onCloseClick={() => setInfowindowOpen()}>
+                        onCloseClick={() => setInfoWindowOpen()}>
                         <div className={styles.infowindow}>
                             <div className={styles.carousel}>
                                 <Carousel

@@ -1,4 +1,4 @@
-import { getGroupByUser } from "@backend/actions/group"
+import { getGroupByUser } from "@backend/actions/group.action"
 import TablesCards from "./_container/TableCard/TablesCards"
 import dayjs from "dayjs"
 import styles from './page.module.scss'

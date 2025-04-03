@@ -8,7 +8,7 @@ import Link from "next/link";
 import { ROUTES } from "@constants/ROUTES";
 import Button from "@core/Button";
 import { ParticipantStatus } from "@prisma/client";
-import { requestParticipateAction } from "@actions/group";
+import { requestParticipateAction } from "@backend/actions/group.action";
 import { useState } from "react";
 import { ShowIf } from "@common/ShowIf";
 import { STATUS_CONVERT } from "@constants/STATUS_CONVERT";

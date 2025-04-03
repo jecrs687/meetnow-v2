@@ -1,4 +1,4 @@
-import { getMessagesAction } from '@backend/actions/chat'
+import { getMessagesAction } from '@backend/actions/chat.action'
 import styles from './index.module.scss'
 import dayjs from 'dayjs'
 import { getUserId } from '@backend/utils/getUserId'

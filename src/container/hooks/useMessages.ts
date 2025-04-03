@@ -1,5 +1,5 @@
 "use client";
-import { getMessagesAction } from "@backend/actions/chat";
+import { getMessagesAction } from "@backend/actions/chat.action";
 import { useCallback, useEffect, useState } from "react";
 
 const useOldMessages = ({

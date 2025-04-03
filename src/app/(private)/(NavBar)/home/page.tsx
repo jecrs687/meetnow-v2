@@ -7,7 +7,7 @@ import TablesCards from "../groups/_container/TableCard/TablesCards";
 import dayjs from "dayjs";
 import styles from './page.module.scss';
 import { useEffect, useState } from "react";
-import { getPlaces } from "@actions/places";
+import { getPlaces } from "@backend/actions/places.action";
 import { Loader } from "@core/Loader";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@constants/ROUTES";

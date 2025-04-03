@@ -1,5 +1,5 @@
 import { createRef, useEffect, useRef, useState } from "react";
-import { getPlaces } from "../../../../../../backend/actions/places";
+import { getPlaces } from "../../../../../../backend/actions/places.action";
 import styles from './index.module.scss';
 import Link from "next/link";
 import { ROUTES } from "@constants/ROUTES";

@@ -11,7 +11,7 @@ import { getUser } from "@backend/repository/user"
 import { useCallback, useEffect, useState } from 'react';
 import TinderCard from 'react-tinder-card'
 import LoaderSpinner from '@core/LoaderSpinner';
-import { declineParticipateAction, requestParticipateAction } from '@backend/actions/group';
+import { declineParticipateAction, requestParticipateAction } from '@backend/actions/group.action';
 
 export default function Page({
     params: { id }

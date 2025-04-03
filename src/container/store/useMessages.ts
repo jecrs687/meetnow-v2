@@ -1,6 +1,6 @@
 "use client";
 
-import { getMessagesAction, sendMessageAction } from '@backend/actions/chat';
+import { getMessagesAction, sendMessageAction } from '@backend/actions/chat.action';
 import { MessageSend } from '@backend/entity/MessageSend';
 import { Message } from '@prisma/client';
 import { create } from 'zustand';

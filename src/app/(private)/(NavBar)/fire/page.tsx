@@ -1,13 +1,13 @@
 "use client";
 
-import { getPlaces } from "@backend/actions/places";
+import { getPlaces } from "@backend/actions/places.action";
 import { Loader } from "@core/Loader";
 import { storeRequest } from "@utils/storeRequest";
 import { useEffect, useState } from "react";
 import styles from './page.module.scss'
 import TinderCard from "react-tinder-card";
 import { setgroups } from "process";
-import { declineParticipateAction, requestParticipateAction } from "@backend/actions/group";
+import { declineParticipateAction, requestParticipateAction } from "@backend/actions/group.action";
 import { GroupCard } from "@common/GroupCard";
 export default function Page() {
     const [groups, setGroups] = useState<
