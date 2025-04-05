@@ -1,0 +1,180 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --foreground: 225 10% 25%;
+    --background: 0 0% 100%;
+    
+    --card: 0 0% 100%;
+    --card-foreground: 210 20% 20%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 210 20% 20%;
+    
+    --primary: 252 88% 65%;
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 162 85% 39%;
+    --secondary-foreground: 0 0% 100%;
+    
+    --muted: 210 20% 96%;
+    --muted-foreground: 240 4% 46%;
+    
+    --accent: 270 94% 95%;
+    --accent-foreground: 271 81% 57%;
+    
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: var(--primary);
+    
+    --radius: 0.5rem;
+  }
+  
+  .dark {
+    --foreground: 210 20% 90%;
+    --background: 240 10% 10%;
+    
+    --card: 240 10% 16%;
+    --card-foreground: 0 0% 98%;
+    
+    --popover: 240 10% 16%;
+    --popover-foreground: 0 0% 98%;
+    
+    --primary: 252 88% 65%;
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 162 85% 39%;
+    --secondary-foreground: 0 0% 100%;
+    
+    --muted: 240 4% 26%;
+    --muted-foreground: 240 5% 65%;
+    
+    --accent: 270 70% 35%;
+    --accent-foreground: 270 94% 95%;
+    
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    
+    --border: 240 4% 26%;
+    --input: 240 4% 26%;
+    --ring: var(--primary);
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html, body {
+    min-height: 100vh;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  .dark body {
+    background: linear-gradient(to bottom right, hsl(270, 30%, 12.5%), hsl(270, 50%, 20%));
+    background-attachment: fixed;
+  }
+
+  .light body {
+    background: linear-gradient(to bottom right, hsl(355, 100%, 98%), hsl(210, 100%, 98%));
+    background-attachment: fixed;
+  }
+}
+
+@layer components {
+  .container-content {
+    @apply mx-auto w-full max-w-7xl px-6 sm:px-8;
+  }
+  
+  .card-hover {
+    @apply transition-all duration-200 hover:shadow-md;
+  }
+  
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2;
+  }
+  
+  .btn-secondary {
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary/90 inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Common Styles for Maps */
+.map-container {
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+/* Hide scrollbar for chrome and safari */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+body {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  .container-content {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Animation utilities */
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  
+  .animate-slide-up {
+    animation: slideUp 0.5s ease-in-out;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideUp {
+    from {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+
+  .animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+}
